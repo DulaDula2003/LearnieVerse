@@ -3,7 +3,7 @@ LearnieVerse v4 – A dynamic EdTech platform built with Flask &amp; MySQL, offe
 
 
 # Add remote
-git remote add origin https://github.com/<your-username>/learnieverse-v4.git
+git remote add origin git pull origin main --allow-unrelated-histories
 
 # Pull first to avoid conflicts with the README
 git pull origin main --allow-unrelated-histories
