@@ -3,6 +3,7 @@ import os
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY") or "your_secret_key"
     
+    MYSQL_URL = os.environ.get("DATABASE_URL")
     # MySQL configuration from Render's environment variables
     MYSQL_HOST = os.environ.get("MYSQL_HOST") or "localhost"
     MYSQL_USER = os.environ.get("MYSQL_USER") or "root"
