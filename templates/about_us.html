@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - LearnieVerse</title>
+    <!-- Apply FavIcon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Logo.png') }}">
+    <!-- Import Quicksand font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">
+                <img src="../static/images/Logo.png" alt="LearnieVerse Logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- About Us Section -->
+    <section class="about-us">
+        <div class="container">
+            <h1>About LearnieVerse</h1>
+            <p class="intro">A cutting-edge learning platform that bridges the gap between students, educators, and institutions, creating a collaborative space for growth and discovery.</p>
+            
+            <div class="feature-cards">
+                <div class="card">
+                    <h2>Our Vision</h2>
+                    <p>We aim to transform the learning experience by creating an environment where collaboration, creativity, and innovation are at the core of every interaction.</p>
+                </div>
+                <div class="card">
+                    <h2>Our Mission</h2>
+                    <p>Our mission is to provide students, teachers, and institutions with the tools they need to succeed—delivering an experience that’s seamless, engaging, and impactful.</p>
+                </div>
+                <div class="card">
+                    <h2>Our Values</h2>
+                    <p>At LearnieVerse, we prioritize inclusivity, creativity, and lifelong learning. Every learner deserves the chance to unlock their full potential.</p>
+                </div>
+            </div>
+            
+            <div class="features-list">
+                <h2>Key Features</h2>
+                <ul>
+                    <li><i class="fas fa-chalkboard-teacher"></i> Real-time classes with interactive tools</li>
+                    <li><i class="fas fa-users"></i> Collaborative learning environment</li>
+                    <li><i class="fas fa-rocket"></i> Personalized learning paths</li>
+                    <li><i class="fas fa-comments"></i> Seamless communication between students and teachers</li>
+                </ul>
+            </div>
+
+            <!-- Team Section -->
+            <div class="team">
+                <h2>Meet the Team</h2>
+                <div class="team-members">
+                    <div class="team-member">
+                        <img src="../static/images/team1.jpg" alt="John Doe">
+                        <h3>John Doe</h3>
+                        <p>CEO & Founder</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="../static/images/team2.jpg" alt="Jane Smith">
+                        <h3>Jane Smith</h3>
+                        <p>Chief Technology Officer</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="../static/images/team3.jpg" alt="Alex Brown">
+                        <h3>Alex Brown</h3>
+                        <p>Head of Education</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta">
+                <h2>Join the LearnieVerse Community</h2>
+                <p>We are shaping the future of education with innovative tools for learning. Whether you're a student, teacher, or institution, LearnieVerse is your partner in success.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="../static/images/Logo.png" alt="LearnieVerse Logo">
+                <p>© 2025 LearnieVerse. All Rights Reserved.</p>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            
+        </div>
+    </footer>
+</body>
+</html>

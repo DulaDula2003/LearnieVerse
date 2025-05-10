@@ -1,0 +1,82 @@
+{% extends "student/base.html" %}
+
+{% block title %}Join Class - {{ class_data.class_name }}{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ class_data.class_name }}</h1>
+  <h2>Join Class</h2>
+</div>
+
+<div class="cards-container" style="gap: 15px;">
+    <!-- Class Details Card -->
+    <div class="card class-info-card">
+        <h4>Class Details</h4>
+        <table class="class-info-table single-row">
+          <thead>
+            <tr>
+              <th>Class Name</th>
+              <th>Teacher</th>
+              <th>Date & Time</th>
+              <th>Join Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ class_data.class_name }}</td>
+              <td>{{ class_data.teacher_name }}</td>
+              <td>
+                {% if class_data.class_time %}
+                  {% set hour = class_data.class_time.seconds // 3600 %}
+                  {% set minute = (class_data.class_time.seconds // 60) % 60 %}
+                  {{ '%02d:%02d' | format(hour, minute) }}
+                {% else %}--{% endif %}
+                on {{ class_data.class_date.strftime('%d %b %Y') }}
+              </td>
+              <td>
+                {% if class_data.join_link %}
+                  <a href="{{ class_data.join_link }}" target="_blank" class="btn take-class-btn">Join Video Call</a>
+                {% else %}
+                  <span class="btn take-class-btn disabled">Join Link Not Available</span>
+                {% endif %}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+  
+  <!-- Chat Section Card -->
+  <div class="card" style="
+    flex: 3;">
+    <h4>Class Chat</h4>
+    <div class="chat-messages">
+      {% if chats %}
+        {% for msg in chats %}
+          <div class="chat-message">
+            <strong>{{ msg.sender_email }}</strong>: {{ msg.message }}
+            <small style="font-size: 0.8em;">({{ msg.created_at }})</small>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No messages yet.</p>
+      {% endif %}
+    </div>
+    <form method="POST" class="chat-form" style="
+    gap: 0;
+">
+      <input type="text" name="chat_message" placeholder="Type your message here..." required>
+      <button type="submit" class="btn">Send</button>
+    </form>
+</div>
+<form method="POST" class="chat-form" action="{{ url_for('student.leave_class', class_id=class_data.id) }}" style="flex-direction: row-reverse;">
+    <button type="submit" class="btn btn1">Leave Class</button>
+  </form>      
+</div>
+{% endblock %}
+
+{% block right_panel %}{% endblock %}
+
+{% block scripts %}
+  <!-- Additional JavaScript for chat auto-refreshing etc. -->
+{% endblock %}

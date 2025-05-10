@@ -1,0 +1,139 @@
+{% extends "institute/base.html" %}
+
+{% block title %}Edit Teacher - {{ teacher.teacher_name }}{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+    <h1>{{ institute.institution_name }}</h1>
+    <p>Edit Teacher</p>
+</div>
+
+<div class="cards-container">
+    <div class="students-info-container">
+        <!-- Edit Form -->
+        <form method="POST" enctype="multipart/form-data">
+            <!-- PERSONAL DETAILS -->
+            <h2 class="section-title">Personal Details</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="teacher_name">Full Name</label>
+                    <input type="text" name="teacher_name" id="teacher_name" value="{{ teacher.teacher_name }}"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" name="email" id="email" value="{{ teacher.email }}" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" value="{{ teacher.username }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" name="phone" id="phone" value="{{ teacher.phone }}">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" name="dob" id="dob" value="{{ teacher.dob|default('', true) }}">
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select name="gender" id="gender">
+                        <option value="">-- Select Gender --</option>
+                        <option value="male" {% if teacher.gender=='male' %}selected{% endif %}>Male</option>
+                        <option value="female" {% if teacher.gender=='female' %}selected{% endif %}>Female</option>
+                        <option value="other" {% if teacher.gender=='other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" name="city" id="city" value="{{ teacher.city }}">
+                </div>
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <input type="text" name="state" id="state" value="{{ teacher.state }}">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" name="address" id="address" value="{{ teacher.address }}">
+                </div>
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <input type="text" name="department" id="department" value="{{ teacher.department }}">
+                </div>
+            </div>
+
+            <!-- PROFESSIONAL DETAILS -->
+            <h2 class="section-title">Professional Details</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="subject_expertise1">Subject Expertise</label>
+                    <input type="text" name="subject_expertise1" id="subject_expertise1"
+                        value="{{ teacher.subject_expertise1 }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject_expertise2">Additional Expertise</label>
+                    <input type="text" name="subject_expertise2" id="subject_expertise2"
+                        value="{{ teacher.subject_expertise2 }}">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="years_experience">Years of Experience</label>
+                    <input type="number" name="years_experience" id="years_experience"
+                        value="{{ teacher.years_experience }}">
+                </div>
+                <div class="form-group">
+                    <label for="highest_qualification">Highest Qualification</label>
+                    <input type="text" name="highest_qualification" id="highest_qualification"
+                        value="{{ teacher.highest_qualification }}">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="specialization">Specialization</label>
+                    <input type="text" name="specialization" id="specialization" value="{{ teacher.specialization }}">
+                </div>
+                <div class="form-group">
+                    <label for="teacher_id">Teacher ID</label>
+                    <input type="text" name="teacher_id" id="teacher_id" value="{{ teacher.teacher_id }}" required>
+                </div>
+            </div>
+
+            <!-- FILE UPLOAD -->
+            <h2 class="section-title">Uploads</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="profile_pic">Upload Profile Picture</label>
+                    <input type="file" name="profile_pic" id="profile_pic" class="file-input">
+                </div>
+                <div class="form-group">
+                    <label for="resume">Upload Resume</label>
+                    <input type="file" name="resume" id="resume" class="file-input">
+                </div>
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <div class="btn-row">
+                <button type="submit" class="register-btn">Update Teacher</button>
+            </div>
+        </form>
+    </div>
+
+    {% endblock %}
+
+    {% block right_panel %}{% endblock %}

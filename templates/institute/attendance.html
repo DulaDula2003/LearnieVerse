@@ -1,0 +1,74 @@
+{% extends "institute/base.html" %}
+
+{% block title %}LearnieVerse - Attendance{% endblock %}
+{% block right_panel %}{% endblock %}
+
+{% block content %}
+  <div class="institute-info">
+    <h1>{{ institute.institution_name }}</h1>
+    <h2>Attendance</h2>
+  </div>
+
+  <div class="cards-container">
+    <div class="attendance-card" style="max-height: 100%;">
+      <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h4>Student Attendance</h4>
+        <div class="search-container">
+          <input type="text" placeholder="Search students..." id="studentSearch" onkeyup="filterStudents()">
+          <button type="button" onclick="filterStudents()">Search</button>
+        </div>
+      </div>
+
+      <table class="attendance-table" id="studentAttendanceTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Total Days</th>
+            <th>Present</th>
+            <th>Absent</th>
+            <th>Attendance %</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rec in attendance_records %}
+          <tr>
+            <td>{{ rec.student_name }}</td>
+            <td>{{ rec.student_id }}</td>
+            <td>{{ rec.total_days }}</td>
+            <td>{{ rec.present }}</td>
+            <td>{{ rec.absent }}</td>
+            <td>
+              {% if rec.attendance_pct is not none %}
+                {{ '%.1f'|format(rec.attendance_pct) }}%
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="6" style="text-align:center;">No attendance records found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function filterStudents() {
+      const input = document.getElementById('studentSearch');
+      const filter = input.value.toLowerCase();
+      const rows = document
+        .getElementById('studentAttendanceTable')
+        .getElementsByTagName('tbody')[0]
+        .getElementsByTagName('tr');
+
+      for (let row of rows) {
+        const name = row.cells[0].textContent.toLowerCase();
+        row.style.display = name.includes(filter) ? '' : 'none';
+      }
+    }
+  </script>
+{% endblock %}

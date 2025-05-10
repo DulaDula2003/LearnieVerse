@@ -1,0 +1,208 @@
+{% extends "teacher/base.html" %}
+{% block title %}LearnieVerse – Students{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ session.institute_name }}</h1>
+  <h2>Students</h2>
+</div>
+
+<div class="students-container">
+  <div class="students-header">
+    <h3>Student List</h3>
+    <div class="search-container1">
+      <input type="text" id="studentSearch" placeholder="Search by name or ID…" onkeyup="filterStudents()">
+      <button type="button" onclick="filterStudents()">Search</button>
+    </div>
+  </div>
+
+  <table class="students-table" id="studentsTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in students %}
+      <tr data-id="{{ s.id }}">
+        <td>{{ s.student_name }}</td>
+        <td>{{ s.id }}</td>
+        <td>{{ s.email }}</td>
+        <td>
+          <button class="btn view-btn" data-id="{{ s.id }}">View</button>
+          <button class="btn delete-btn" data-id="{{ s.id }}">Delete</button>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" style="text-align:center;">No students found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Student Info Modal -->
+<div id="studentModal" class="modal" style="display:none; align-items:center; justify-content:center;">
+  <div class="modal-content" style="max-width:600px; width:90%; position:relative;">
+    <span class="close-modal" style="position:absolute;right:1rem;top:1rem;cursor:pointer;font-size:1.5rem;">&times;</span>
+    <h3 id="modalName"></h3>
+    <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+    <p><strong>Enroll:</strong> <span id="modalEnroll"></span></p>
+    <hr>
+    <h4>Classes</h4>
+    <ul id="modalClasses" style="
+    list-style: none;
+"></ul>
+    <hr>
+    <h4>Tests Taken</h4>
+    <ul id="modalTests" style="
+    list-style: none;
+"></ul>
+  </div>
+</div>
+<!-- Floating Invite Student Button -->
+<button class="float-invite-btn" onclick="openInviteModal()">+</button>
+
+<!-- Invite Student Modal -->
+<div id="inviteModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeInviteModal()">&times;</span>
+    <h3>Invite Student</h3>
+    <label for="inviteEmail">Student Email</label>
+    <input type="email" id="inviteEmail" placeholder="Enter student's email" autocomplete="off">
+    <button type="button" onclick="sendInvite()">Send Invite</button>
+    <div id="inviteResponse"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/Teacher_Dashboard.js') }}" defer></script>
+<script>
+  // Search/filter
+  function filterStudents() {
+    let filter = document.getElementById('studentSearch').value.toUpperCase();
+    document.querySelectorAll('#studentsTable tbody tr[data-id]').forEach(tr => {
+      let name = tr.children[0].innerText.toUpperCase();
+      let id   = tr.children[1].innerText.toUpperCase();
+      tr.style.display = (name.includes(filter)||id.includes(filter))?'':'none';
+    });
+  }
+
+  // Modal functions for Invite
+  function openInviteModal() {
+    document.getElementById("inviteModal").style.display = "flex";
+  }
+  function closeInviteModal() {
+    document.getElementById("inviteModal").style.display = "none";
+  }
+  function sendInvite() {
+    const email = document.getElementById("inviteEmail").value;
+    const responseDiv = document.getElementById("inviteResponse");
+    
+    // Reset the response display
+    responseDiv.style.display = "none";
+    responseDiv.textContent = "";
+    responseDiv.className = "response-message";
+  
+    if (!email) {
+      responseDiv.textContent = "Please enter a valid email address.";
+      responseDiv.classList.add("response-error");
+      responseDiv.style.display = "block";
+      return;
+    }
+  
+    fetch("{{ url_for('teacher.invite_student') }}", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ student_email: email })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        responseDiv.textContent = "Error: " + data.error;
+        responseDiv.classList.add("response-error");
+      } else {
+        responseDiv.textContent = "Invitation sent successfully to " + email;
+        responseDiv.classList.add("response-success");
+        document.getElementById("inviteEmail").value = "";
+        // Optional: Auto-close modal after a few seconds
+        setTimeout(() => {
+          closeInviteModal();
+          responseDiv.textContent = "";
+          responseDiv.className = "response-message";
+          responseDiv.style.display = "none";
+        }, 3000);
+      }
+      responseDiv.style.display = "block";
+    })
+    .catch(err => {
+      console.error(err);
+      responseDiv.textContent = "Error sending invite.";
+      responseDiv.classList.add("response-error");
+      responseDiv.style.display = "block";
+    });
+  }  
+  // Modal controls
+  const modal = document.getElementById('studentModal');
+  document.querySelector('#studentModal .close-modal')
+    .onclick = () => modal.style.display='none';
+
+  // View button
+  document.querySelectorAll('.view-btn').forEach(btn=>{
+    btn.onclick = () => {
+      const sid = btn.dataset.id;
+      fetch(`{{ url_for('teacher.student_info', student_id=0) }}`.replace('0', sid))
+        .then(r => r.json())
+        .then(data => {
+          if(data.error) return alert(data.error);
+          const st = data.student;
+          document.getElementById('modalName').innerText = st.student_name;
+          document.getElementById('modalEmail').innerText= st.email;
+          document.getElementById('modalEnroll').innerText= st.enroll_number;
+          // classes
+          let cls = document.getElementById('modalClasses');
+          cls.innerHTML = data.classes.length
+            ? data.classes.map(c=>`<li>${c.class_name} (${c.class_date})</li>`).join('')
+            : '<li>None</li>';
+          // tests
+          let tst = document.getElementById('modalTests');
+          tst.innerHTML = data.tests.length
+            ? data.tests.map(t=>`
+                <li>
+                  ${t.title} — ${t.score}% (${t.grade})
+                  ${t.confirmed?'<i class="fas fa-check-circle text-success"></i>':''}
+                  <br><small class="text-muted">on ${t.submitted_at}</small>
+                </li>`).join('')
+            : '<li>None</li>';
+
+          modal.style.display = 'flex';
+        });
+    };
+  });
+
+  // Delete button
+  document.querySelectorAll('.delete-btn').forEach(btn=>{
+    btn.onclick = () => {
+      if(!confirm('Delete this student?')) return;
+      const sid = btn.dataset.id;
+      fetch(`{{ url_for('teacher.delete_student', student_id=0) }}`.replace('0', sid), {
+             method: 'POST'
+           })
+      .then(r=>r.json())
+      .then(data=>{
+        if(data.success) {
+          document.querySelector(`tr[data-id="${sid}"]`).remove();
+        } else {
+          alert(data.error||'Delete failed');
+        }
+      });
+    };
+  });
+</script>
+{% endblock %}
+{% block right_panel %}{% endblock %}

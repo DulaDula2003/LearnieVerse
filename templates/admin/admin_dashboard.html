@@ -1,0 +1,62 @@
+{% extends "admin/base.html" %}
+{% block title %}LearnieVerse Admin Dashboard{% endblock %}
+
+{% block content %}
+  <div class="institute-info">
+    <h1>Admin Dashboard</h1>
+  </div>
+
+  <div class="cards-container">
+    <!-- Top Row: Quick Stats & Recent Activity -->
+    <div class="row top-row">
+      <div class="card">
+        <h4>Quick Stats</h4>
+        <ul>
+          <li>Total Users: {{ total_users }}</li>
+          <li>Active Last 30d: {{ active_users }}</li>
+          <li>Institutions Pending: {{ pending_institutes }}</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Recent Activity (7d)</h4>
+        <ul>
+          <li>{{ recent_regs }} new registrations</li>
+          <li>{{ recent_alerts }} new announcements</li>
+          <li>{{ recent_tickets }} new support tickets</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Middle Row: System Notifications & User Requests -->
+    <div class="row middle-row">
+      <div class="card">
+        <h4>System Notifications</h4>
+        <ul>
+          {% for note in notifications %}
+            <li>{{ note }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="card">
+        <h4>User Requests</h4>
+        <ul>
+          {% for req in user_requests %}
+            <li>{{ req }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom Row: Support Tickets -->
+    <div class="row bottom-row">
+      <div class="card">
+        <h4>Recent Support Tickets</h4>
+        <ul>
+          {% for t in support_tickets %}
+            <li>Ticket #{{ t.id }} – {{ t.status.capitalize() }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

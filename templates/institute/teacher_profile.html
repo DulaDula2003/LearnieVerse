@@ -1,0 +1,55 @@
+{% extends "institute/base.html" %}
+
+{% block title %}LearnieVerse - {{ teacher.teacher_name }}{% endblock %}
+
+{% block right_panel %}{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ institute.institution_name }}</h1>
+  <h2>Teacher Profile</h2>
+</div>
+
+<div class="profile-container">
+  <div class="profile-header">
+    {% if teacher.profile_pic %}
+    <img src="{{ url_for('static', filename='uploads/' ~ teacher.profile_pic) }}" alt="{{ teacher.teacher_name }}"
+      class="profile-img" />
+    {% else %}
+    <img src="{{ url_for('static', filename='images/default-profile.png') }}" alt="Default Profile"
+      class="profile-img" />
+    {% endif %}
+    <div class="profile-info">
+      <h2>{{ teacher.teacher_name }}</h2>
+      <p>ID: {{ teacher.teacher_id }}</p>
+    </div>
+  </div>
+
+  <div class="profile-details">
+    <p><strong>Email:</strong> {{ teacher.email or 'N/A' }}</p>
+    <p><strong>Department:</strong> {{ teacher.department }}</p>
+    <p><strong>Date of Birth:</strong> {{ teacher.dob }}</p>
+    <p><strong>Address:</strong> {{ teacher.address }}, {{ teacher.city }}, {{ teacher.state }}</p>
+  </div>
+
+  <div class="profile-extra">
+    <h3>Subjects</h3>
+    <ul>
+      {% if teacher.subject_expertise1 %}<li>{{ teacher.subject_expertise1 }}</li>{% endif %}
+      {% if teacher.subject_expertise2 %}<li>{{ teacher.subject_expertise2 }}</li>{% endif %}
+    </ul>
+
+    <h3>Notifications</h3>
+    {% if notifications %}
+    <ul>
+      {% for note in notifications %}
+      <li>{{ note.title }} on {{ note.test_date.strftime('%b %d, %Y') }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No upcoming tests or projects.</p>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

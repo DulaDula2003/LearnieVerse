@@ -1,0 +1,90 @@
+{% extends "student/base.html" %}
+
+{% block title %}LearnieVerse - Take Test{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>Institute Name</h1>
+  <h2>{{ test.title }}</h2>
+</div>
+
+<div id="testAreaLock">
+  <div class="mcq-container">
+    <h3>Ready to start?</h3>
+    <p><strong>Date:</strong> {{ test.test_date.strftime('%d %b %Y') }} |
+      <strong>Duration:</strong> {{ test.duration }} minutes
+    </p>
+
+    <!-- Timer Display -->
+    <div id="timerDisplay" style="display: none; font-size: 1.2rem; margin-bottom: 10px; color: crimson;">
+      Time Left: <span id="timer"></span>
+    </div>
+
+    <!-- Start Button -->
+    <button id="startBtn" class="submit-test-btn">Start Test</button>
+
+    <!-- Test Form -->
+    <form id="testForm" method="POST" style="display: none;">
+      <input type="hidden" name="test_id" value="{{ test.id }}" />
+
+      {% for question in questions %}
+      <div class="question-item">
+        <label>Q{{ question.question_number }}: {{ question.question_text }}</label>
+        <div class="options">
+          {% for option in question.options %}
+          <div class="option">
+            <input type="radio" id="q{{ question.id }}_o{{ option.id }}" name="question_{{ question.id }}"
+              value="{{ option.id }}" required>
+            <label for="q{{ question.id }}_o{{ option.id }}">{{ option.option_text }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+
+      <button type="submit" class="submit-test-btn">Submit Test</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const duration = '{{ test.duration }}'; // Duration in minutes
+    const startBtn = document.getElementById('startBtn');
+    const testForm = document.getElementById('testForm');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerSpan = document.getElementById('timer');
+    const blocker = document.getElementById('screenBlocker');
+
+    let timeLeft = duration * 60; // in seconds
+    let timer;
+
+    function startCountdown() {
+      timer = setInterval(() => {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        timerSpan.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          alert("Time’s up! Submitting your test.");
+          testForm.submit();
+        }
+        timeLeft--;
+      }, 1000);
+    }
+
+    startBtn.addEventListener('click', () => {
+      startBtn.style.display = 'none';
+      testForm.style.display = 'block';
+      timerDisplay.style.display = 'block';
+      blocker.style.display = 'block';
+      startCountdown();
+    });
+  });
+</script>
+{% endblock %}
+
+{% block right_panel %}{% endblock %}

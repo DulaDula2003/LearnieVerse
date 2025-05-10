@@ -1,0 +1,47 @@
+{% extends "teacher/base.html" %}
+
+{% block title %}Edit Class - {{ class_data.class_name }}{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>Edit Class</h1>
+  <h2>{{ class_data.class_name }}</h2>
+</div>
+
+<div class="anc-form-container">
+  <h2>Update Class Details</h2>
+  <form method="POST">
+    <div class="anc-form-group">
+      <label for="class_name">Class Name:</label>
+      <input type="text" id="class_name" name="class_name" value="{{ class_data.class_name }}" required>
+    </div>
+
+    <div class="anc-form-group">
+      <label for="class_time">Class Time:</label>
+      <input type="time" id="class_time" name="class_time" value="{{ class_data.class_time }}" required>
+    </div>
+
+    <div class="anc-form-group">
+      <label for="class_date">Class Date:</label>
+      <input type="date" id="class_date" name="class_date" value="{{ class_data.class_date }}" required>
+    </div>
+
+    <div class="anc-form-group">
+      <label for="join_link">Join Link:</label>
+      <input type="url" id="join_link" name="join_link" value="{{ class_data.join_link }}">
+    </div>
+
+    <div class="anc-form-group">
+      <label>Class Visibility:</label>
+      <div class="anc-radio-group">
+        <label><input type="radio" name="visibility" value="public" {% if class_data.visibility == 'public' %}checked{% endif %}> Public</label>
+        <label><input type="radio" name="visibility" value="private" {% if class_data.visibility == 'private' %}checked{% endif %}> Private</label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn anc-submit-btn">Update Class</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block right_panel %}{% endblock %}

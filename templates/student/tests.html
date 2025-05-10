@@ -1,0 +1,19 @@
+{% extends "student/base.html" %}
+
+{% block title %}Your Live Tests{% endblock %}
+
+{% block content %}
+  <h1>Your Live Tests</h1>
+  {% if tests %}
+    <ul>
+      {% for test in tests %}
+        <li>
+          <strong>{{ test.title }}</strong> - {{ test.test_date.strftime('%d %b %Y') }} - Duration: {{ test.duration }} mins
+          <a href="{{ url_for('student.take_test', test_id=test.id) }}" class="btn">Take Test</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No live tests assigned to you yet.</p>
+  {% endif %}
+{% endblock %}

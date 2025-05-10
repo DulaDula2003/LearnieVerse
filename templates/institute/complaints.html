@@ -1,0 +1,150 @@
+{% extends "institute/base.html" %}
+{% block title %}LearnieVerse - Complaints{% endblock %}
+{% block right_panel %}{% endblock %}
+
+{% block content %}
+  <div class="institute-info">
+    <h1>{{ institute.institution_name }}</h1>
+    <h2>Complaints</h2>
+  </div>
+
+  <div class="cards-container">
+    <div class="students-info-container">
+      <div class="search-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <h3>Complaints</h3>
+        <div class="filter-container" style="display:flex;gap:1rem;">
+          <select id="complaintFilter" onchange="filterComplaints()">
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="reviewed">Reviewed</option>
+            <option value="resolved">Resolved</option>
+          </select>
+          <div class="search-container">
+            <input type="text" id="complaintSearch" placeholder="Search subject or email…" oninput="filterComplaints()"/>
+            <button type="button" onclick="filterComplaints()" class="search-btn">Search</button>
+          </div>
+        </div>
+      </div>
+
+      
+      <table class="students-table" id="complaintsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>From</th>
+            <th>Category</th>
+            <th>Subject</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in complaints %}
+          <tr
+          data-status="{{ c.status }}"
+          data-subject="{{ c.subject|lower }}"
+          data-email="{{ c.from_email|lower }}"
+          data-description="{{ c.details|e }}"
+          >
+          <p id="noResults" style="display:none;text-align:center;color:#888;">
+            No matching complaints found.
+          </p>
+            <td>{{ c.id }}</td>
+            <td>
+              {% if c.is_anonymous %}
+                Anonymous
+              {% else %}
+                {{ c.from_email }} ({{ c.from_role|capitalize }})
+              {% endif %}
+            </td>
+            <td>{{ c.category|capitalize }}</td>
+            <td>{{ c.subject }}</td>
+            <td>{{ c.status|capitalize }}</td>
+            <td>
+              <a href="#" class="action-link view-btn">View</a> |
+                {% if c.status == 'pending' %}
+                  <form action="{{ url_for('institute.approve_complaint', complaint_id=c.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="action-link approve-link">Approve</button>
+                  </form>
+                {% else %}
+                  <form action="{{ url_for('institute.pending_complaint', complaint_id=c.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="action-link pending-link">Mark Pending</button>
+                  </form>
+                {% endif %}
+              
+              <form action="{{ url_for('institute.delete_complaint', complaint_id=c.id) }}"
+                    method="POST" style="display:inline;">
+                <button type="submit" class="action-link delete-link">| Delete</button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="6" style="text-align:center;">No complaints found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Complaint Detail Modal -->
+  <div id="complaintModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close-modal" id="closeComplaintModal">&times;</span>
+      <h3>Complaint Details</h3>
+      <p><strong>ID:</strong> <span id="modalComplaintID"></span></p>
+      <p><strong>From:</strong> <span id="modalFrom"></span></p>
+      <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+      <p><strong>Subject:</strong> <span id="modalSubject"></span></p>
+      <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+      <p><strong>Details:</strong></p>
+      <p id="modalDetails"></p>
+    </div>
+  </div>
+
+  <script>
+    // Modal handlers
+    const modal = document.getElementById('complaintModal');
+    document.getElementById('closeComplaintModal')
+            .addEventListener('click', () => modal.style.display='none');
+    window.addEventListener('click', e => { if(e.target===modal) modal.style.display='none'; });
+
+    // “View” buttons
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const row = btn.closest('tr');
+        document.getElementById('modalComplaintID').innerText = row.children[0].innerText;
+        document.getElementById('modalFrom').innerText        = row.children[1].innerText;
+        document.getElementById('modalCategory').innerText    = row.children[2].innerText;
+        document.getElementById('modalSubject').innerText     = row.children[3].innerText;
+        document.getElementById('modalStatus').innerText      = row.children[4].innerText;
+        document.getElementById('modalDetails').innerText     = row.dataset.description;
+        modal.style.display = 'flex';
+      });
+    });
+
+    // Filter & Search
+    function filterComplaints() {
+      const search = document.getElementById('complaintSearch').value.toLowerCase();
+      const statusFilter = document.getElementById('complaintFilter').value;
+      const rows = document.querySelectorAll('#complaintsTable tbody tr');
+      let visible = 0;
+
+      rows.forEach(r => {
+        const matchesText   = 
+          r.dataset.subject.includes(search) ||
+          r.dataset.email.includes(search);
+        const matchesStatus = (statusFilter==='all' || r.dataset.status===statusFilter);
+
+        if (matchesText && matchesStatus) {
+          r.style.display = '';
+          visible++;
+        } else {
+          r.style.display = 'none';
+        }
+      });
+
+      document.getElementById('noResults').style.display = visible===0 ? 'block' : 'none';
+    }
+  </script>
+{% endblock %}

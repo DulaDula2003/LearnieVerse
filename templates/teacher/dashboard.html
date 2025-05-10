@@ -1,0 +1,131 @@
+{% extends "teacher/base.html" %}
+
+{% block title %}LearnieVerse - Teacher Dashboard{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ institute_name }}</h1>
+  <h2>Teacher Dashboard</h2>
+</div>
+
+<div class="cards-container">
+  <!-- ───── Top Row: Welcome and Class Stats ───── -->
+  <div class="row top-row">
+    <div class="card">
+      <h4>Welcome, {{ teacher_name }}</h4>
+      <ul>
+        <li>Total Classes This Week: {{ total_classes }}</li>
+        <li>Assignments to Grade: {{ assignments_to_grade }}</li>
+        <li>Pending Messages: {{ pending_messages }}</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h4>Upcoming Classes</h4>
+      <ul>
+        {% for cls in upcoming_classes %}
+          <li>{{ cls.course_name }} – {{ cls.time }} on {{ cls.date.strftime('%b %d, %Y') }}</li>
+        {% else %}
+          <li>No upcoming classes.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- ───── Middle Row: Activities & Messages ───── -->
+  <div class="row middle-row">
+    <div class="card">
+      <h4>Recent Activities</h4>
+      <ul>
+        {% for activity in recent_activities %}
+          <li>{{ activity }}</li>
+        {% else %}
+          <li>No recent activities.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="card">
+      <h4>Recent Messages</h4>
+      <ul>
+        {% for msg in messages %}
+          <li>{{ msg[:60] }}{% if msg|length > 60 %}...{% endif %}</li>
+        {% else %}
+          <li>No new messages.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- ───── Bottom Row: Placeholder + Announcements ───── -->
+  <div class="row bottom-row">
+    <div class="card">
+      <h4>Class Performance Overview</h4>
+      <canvas id="performanceChart" height="250"></canvas>
+    </div>
+
+    <div class="card">
+      <h4>Latest Announcements</h4>
+      <ul>
+        {% for announcement in announcements %}
+          <li>{{ announcement }}</li>
+        {% else %}
+          <li>No announcements.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/Teacher_Dashboard.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('performanceChart').getContext('2d');
+const performanceChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: `{{ perf_labels|tojson }}`,
+    datasets: [{
+      label: 'Average Score (%)',
+      data: `{{ perf_scores|tojson }}`,
+      backgroundColor: 'rgba(100, 149, 237, 0.6)',
+      borderColor: 'rgba(100, 149, 237, 1)',
+      borderWidth: 1,
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          color: '#ccc'
+        },
+        grid: {
+          color: '#444'
+        }
+      },
+      x: {
+        ticks: {
+          color: '#ccc'
+        },
+        grid: {
+          color: '#444'
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        labels: {
+          color: '#ccc'
+        }
+      }
+    }
+  }
+});
+</script>
+{% endblock %}

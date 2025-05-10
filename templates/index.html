@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LearnieVerse - Responsive Hero</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Apply FavIcon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Logo.png') }}">
+    <!-- Import Quicksand font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
+
+    <!-- Global CSS (custom scrollbar, common styles, etc.) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <!-- Import CSS File -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+
+<body>
+<!-- Flash Messages Popup -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div id="flashMessages">
+      {% for category, message in messages %}
+        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+    <!-- HEADER / NAVIGATION -->
+    <nav class="navbar">
+        <div class="logo">LearnieVerse</div>
+        <div class="nav-box">
+            <ul class="nav-links">
+                <li><a href="{{ url_for('about_us') }}">About Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <!-- Instead of a <button>, use an <a> with your Flask route -->
+            <a href="{{ url_for('auth.get_started') }}" class="get-started">Get Started</a>
+
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <!-- Main Heading -->
+            <h1>Unlock the Power of Learning Together</h1>
+
+            <!-- Info Boxes -->
+            <div class="info-boxes">
+                <div class="info-box">
+                    <div class="sub-heading">Get Sharing</div>
+                </div>
+                <div class="info-box">
+                    <div class="sub-heading">Learn More</div>
+                </div>
+                <div class="info-box">
+                    <div class="sub-heading">Collaborated</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="badge-section">
+        <h2 class="badge-heading">What To Interact With?</h2>
+
+        <div class="badge-container">
+            <!-- Badge 1: Notes Sharing -->
+            <div class="badge">
+                <div class="ribbon"></div>
+                <div class="badge-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3>Notes Sharing</h3>
+                <p>Collaborate with peers and share your notes effortlessly.</p>
+            </div>
+
+            <!-- Badge 2: Online Classes -->
+            <div class="badge alt">
+                <div class="ribbon"></div>
+                <div class="badge-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3>Online Classes</h3>
+                <p>Experience the best virtual classrooms tailored for you.</p>
+            </div>
+
+            <!-- Badge 3: Attendance Tracking -->
+            <div class="badge">
+                <div class="ribbon"></div>
+                <div class="badge-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <h3>Attendance Tracking</h3>
+                <p>Keep track of attendance seamlessly with our built-in tools.</p>
+            </div>
+
+            <!-- Badge 4: Interactions -->
+            <div class="badge alt">
+                <div class="ribbon"></div>
+                <div class="badge-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Interactions</h3>
+                <p>Engage in real-time discussions and problem-solving activities.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <h2 class="section-heading">How LearnieVerse Works</h2>
+        <div class="steps-container">
+            <!-- Step 1: Discover -->
+            <div class="step">
+                <div class="step-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Discover</h3>
+                <p>Explore resources, join communities, and find the topics that spark your interest.</p>
+            </div>
+            <!-- Step 2: Collaborate -->
+            <div class="step">
+                <div class="step-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Collaborate</h3>
+                <p>Share notes, discuss ideas, and solve problems together in real-time.</p>
+            </div>
+            <!-- Step 3: Succeed -->
+            <div class="step">
+                <div class="step-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Succeed</h3>
+                <p>Master concepts, ace your exams, and celebrate your achievements.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial-section-alt">
+        <h2 class="testimonial-heading">What Our Users Say</h2>
+
+        <div class="testimonial-wrapper">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-bubble">
+                <!-- Remove the float from <img> and wrap content in a flex container -->
+                <img src="../static/images/Testimonial_teacher.jpg" alt="Teacher" class="avatar">
+                <div class="testimonial-text">
+                    <h3>Ms. Emily Dawson – <h5>Professor in Riverdale Academy</h5>
+                    </h3>
+                    <p>“LearnieVerse has transformed the way I learn. The interactive tools are amazing!”</p>
+                </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="testimonial-bubble alt">
+                <img src="../static/images/Testimonial_student.jpeg" alt="Student" class="avatar">
+                <div class="testimonial-text">
+                    <h3>Jake Thompson – <h5>Student in Westwood High</h5>
+                    </h3>
+                    <p>“I love the community features. It’s like having a classroom with friends from all over the
+                        world!”</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero-section-4">
+        <div class="hero-4-bgbox">
+
+            <div class="diagram-container">
+                <!-- TEACHER BOX -->
+                <div class="teacher-box">
+                    <div class="teacher-img"></div>
+                    <h3>Teacher</h3>
+                    <p>
+                        <strong>Empowering educators to inspire the next generation.</strong><br>
+                        Create and manage engaging courses. Provide personalized feedback. Track progress effortlessly.
+                    </p>
+                </div>
+
+                <!-- STUDENT BOX -->
+                <div class="student-box">
+                    <div class="student-img"></div>
+                    <h3>Student</h3>
+                    <p>
+                        <strong>"Learn anytime, anywhere with the power of technology."</strong><br>
+                        Access courses tailored to your needs. Collaborate with teachers and peers. Track your
+                        achievements in real-time.
+                    </p>
+                </div>
+
+                <!-- INSTITUTE BOX -->
+                <div class="institute-box">
+                    <div class="institute-img"></div>
+                    <h3>Institute</h3>
+                    <p>
+                        <strong>"Bridge the gap between education and technology."</strong><br>
+                        Manage teachers, students, and course data seamlessly. Ensure high-quality learning for all.
+                        Foster collaboration across the board.
+                    </p>
+                </div>
+
+                <!-- ELLIPSE WITH <=> SYMBOL -->
+                <div class="ellipse-6">
+                    <div class="symbol">&lt;=&gt;</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section">
+        <div class="contact-heading">
+            <h2>Get In Touch</h2>
+            <p>
+                We’d love to hear from you! Whether you have a question about the platform,
+                need assistance, or just want to provide feedback, feel free to reach out to us.
+            </p>
+        </div>
+
+        <div class="contact-container">
+            <!-- Box 1: Email -->
+            <div class="contact-box email-box">
+                <h3>E-Mail</h3>
+                <p class="contact-info">contact@learnieverse.com</p>
+            </div>
+
+            <!-- Box 2: Phone -->
+            <div class="contact-box phone-box">
+                <h3>Phone</h3>
+                <p class="contact-info">+1 (123) 456-7890</p>
+            </div>
+
+            <!-- Box 3: Address -->
+            <div class="contact-box address-box">
+                <h3>Address</h3>
+                <p class="contact-info">
+                    123 Innovation Drive,<br>
+                    Tech City, Knowledge Valley,<br>
+                    State Name, Country,<br>
+                    ZIP Code.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="map-section">
+        <div class="map-wrapper">
+            <iframe class="map-frame"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345093705!2d144.9556513159047!3d-37.8173279797517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d5df1f0e73b%3A0x5f8b0f52708e01c3!2sFederation%20Square!5e0!3m2!1sen!2sus!4v1633029123456"
+                allowfullscreen="" loading="lazy">
+            </iframe>
+
+        </div>
+    </section>
+
+    <footer id="contact" class="footer-section">
+        <div class="footer-container">
+
+            <!-- BRAND / ABOUT COLUMN -->
+            <div class="footer-col brand-col">
+                <div class="logo-wrap">
+                    <img src="../static/images/Logo.png" alt="LearnieVerse Logo" class="footer-logo" />
+                    <h2 class="footer-title">LearnieVerse</h2>
+                </div>
+                <p class="footer-desc">
+                    “LearnieVerse is a platform designed to bridge the gap between students,
+                    teachers, and institutions. Our mission is to foster collaborative
+                    learning through advanced tools and seamless communication.”
+                </p>
+                <p class="footer-email">
+                    Email: support@learnieverse.com
+                </p>
+            </div>
+
+            <!-- FOLLOW US / SOCIAL COLUMN -->
+            <div class="footer-col follow-col">
+                <h3 class="footer-heading">Follow Us</h3>
+                <p>Stay connected with us on social media.</p>
+                <p>Facebook</p>
+                <p>Twitter</p>
+                <p class="footer-phone">Phone: +123 456 7890</p>
+            </div>
+
+            <!-- LEGAL / ADDRESS COLUMN -->
+            <div class="footer-col legal-col">
+                <h3 class="footer-heading">Legal</h3>
+                <p>Privacy Policy</p>
+                <p>Terms of Service</p>
+                <p class="footer-address">
+                    Address: 123 Learning Lane,<br>
+                    Knowledge City, Educationland
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Horizontal line -->
+        <hr class="footer-line" />
+
+        <!-- COPYRIGHT -->
+        <p class="footer-copy">©2025 LearnieVerse. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+</body>
+
+</html>

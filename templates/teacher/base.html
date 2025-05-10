@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Teacher Dashboard{% endblock %}</title>
+    <!-- Apply FavIcon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Logo.png') }}">
+    <!-- Import Quicksand font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
+
+    <!-- Global CSS (custom scrollbar, common styles, etc.) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <!-- Link to the Teacher Dashboard CSS file -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/Teacher_Dashboard.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body class="{% if dark_mode %}dark-mode{% endif %}">
+  <!-- Flash Messages Popup -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+  <div id="flashMessages">
+    {% for category, message in messages %}
+      <div class="flash-message flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endwith %}
+  <div class="dashboard-container">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Logo" class="logo-img">
+        <div class="logo-text">LearnieVerse</div>
+      </div>
+      <nav class="menu">
+        <a href="{{ url_for('teacher.dashboard') }}" class="menu-item {% if request.path == url_for('teacher.dashboard') %}active{% endif %}">Dashboard</a>
+        <a href="{{ url_for('teacher.manage_classes') }}" class="menu-item {% if request.path == url_for('teacher.manage_classes') %}active{% endif %}">Manage Classes</a>
+        <a href="{{ url_for('teacher.make_take_test') }}" class="menu-item {% if request.path == url_for('teacher.make_take_test') %}active{% endif %}">Make &amp; Take Test</a>
+        <a href="{{ url_for('teacher.assignments_grading') }}" class="menu-item {% if request.path == url_for('teacher.assignments_grading') %}active{% endif %}">Assignments &amp; Grading</a>
+        <a href="{{ url_for('teacher.students') }}" class="menu-item {% if request.path == url_for('teacher.students') %}active{% endif %}">Students</a>
+        <a href="{{ url_for('teacher.attendance') }}" class="menu-item {% if request.path == url_for('teacher.attendance') %}active{% endif %}">Attendance</a>
+        <a href="{{ url_for('teacher.messages') }}" class="menu-item {% if request.path == url_for('teacher.messages') %}active{% endif %}">Messages</a>
+        <a href="{{ url_for('teacher.reports') }}" class="menu-item {% if request.path == url_for('teacher.reports') %}active{% endif %}">Reports</a>
+        <a href="{{ url_for('teacher.settings') }}" class="menu-item {% if request.path == url_for('teacher.settings') %}active{% endif %}">Profile &amp; Settings</a>
+      </nav>
+    </aside>
+    
+    <!-- MAIN CONTENT -->
+    <main class="main-content messages-dashboard">
+      {% block content %}
+      <!-- Page-specific content goes here -->
+      {% endblock %}
+    </main>
+    
+    <!-- RIGHT PANEL -->
+    {% block right_panel %}
+    <aside class="right-panel">
+      <div class="right-panel-header">
+        <div class="admin-section">
+          <div class="admin-avatar"></div>
+          <div class="admin-name">
+            Admin Name <br>
+            1234567890
+          </div>
+        </div>
+        <div class="month-nav">
+          <span class="date-label" id="monthYear"></span>
+          <span>
+            <span id="prevMonth" class="arrow-btn">&lt;</span>
+            <span id="nextMonth" class="arrow-btn">&gt;</span>
+          </span>
+        </div>
+      </div>
+      <div class="calendar" id="calendarContainer"></div>
+      <div class="online-users">
+        <h3>Online User</h3>
+        <a href="#" class="see-all">See all</a>
+        <div class="user-entry">
+          <div class="user-avatar"></div>
+          <div class="user-details">
+            <span class="user-name">Name</span>
+            <span class="user-id">ID Number</span>
+          </div>
+          <div class="user-status"></div>
+        </div>
+        <div class="user-entry">
+          <div class="user-avatar"></div>
+          <div class="user-details">
+            <span class="user-name">Name</span>
+            <span class="user-id">ID Number</span>
+          </div>
+          <div class="user-status"></div>
+        </div>
+      </div>
+    </aside>
+    {% endblock %}
+  </div>
+
+
+  {% block scripts %}
+  <!-- Page-specific scripts can be added here -->
+  {% endblock %}
+  <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+</body>
+</html>

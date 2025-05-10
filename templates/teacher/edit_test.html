@@ -1,0 +1,55 @@
+{% extends "teacher/base.html" %}
+
+{% block title %}LearnieVerse - Edit Test{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ institute_name }}</h1>
+  <h2>Edit Test & Questions</h2>
+</div>
+
+<div class="cards-container">
+  <div class="t-card">
+    <h2 class="section-heading">Edit Test</h2>
+    <form action="{{ url_for('teacher.edit_test', test_id=test.id) }}" method="POST" id="createTestForm">
+      <!-- Test Details -->
+      <div class="form-group">
+        <input type="text" id="title" name="title" value="{{ test.title }}" required class="form-control">
+        <input type="text" id="subject" name="subject" value="{{ test.subject }}" required class="form-control">
+        <input type="number" id="duration" name="duration" value="{{ test.duration }}" required class="form-control">
+        <input type="date" id="test_date" name="test_date" value="{{ formatted_date }}" required class="form-control">
+        <input type="time" id="test_time" name="test_time" value="{{ formatted_time }}" required class="form-control">
+      </div>
+
+      <hr>
+      <h3 class="section-heading">Edit Questions</h3>
+
+      {% for q in questions %}
+      <div class="question-item">
+        <input type="hidden" name="question_ids" value="{{ q.id }}">
+        
+        <div class="form-group">
+          <label>Question {{ q.question_number }}:</label>
+          <input type="text" name="question_text_{{ q.id }}" value="{{ q.question_text }}" required class="form-control">
+        </div>
+
+        <div class="options">
+          {% for opt in q.options %}
+          <div class="form-group option">
+            <input type="hidden" name="option_id_{{ q.id }}_{{ loop.index }}" value="{{ opt.id }}">
+            <input type="radio" name="correct_answer_{{ q.id }}" value="{{ loop.index }}" {% if opt.is_correct %}checked{% endif %}>
+            <input type="text" name="option_text_{{ q.id }}_{{ loop.index }}" value="{{ opt.option_text }}" required class="form-control">
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <hr>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block right_panel %}{% endblock %}

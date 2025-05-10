@@ -1,0 +1,94 @@
+{% extends "teacher/base.html" %}
+
+{% block title %}LearnieVerse - Attendance{% endblock %}
+
+{% block content %}
+<main class="main-content att-main-content">
+  <div class="institute-info">
+    <h1>{{ institution.institution_name }}</h1>
+    <h2>Attendance</h2>
+  </div>
+
+  <div class="cards-container">
+    <!-- Date Picker Section -->
+    <div class="att-date-picker">
+      <form method="GET" action="{{ url_for('teacher.attendance') }}">
+        <label for="att-date">Select Date: </label>
+        <input type="date" id="att-date" name="att_date" value="{{ selected_date | default('', true) }}"
+          onchange="this.form.submit()" />
+      </form>
+    </div>
+
+    <!-- Loop through each class -->
+    {% for class in classes %}
+    <div class="att-class-section" data-class="{{ class.class_name }}">
+      <div class="att-class-header">
+        <h3>{{ class.class_name }} ({{ class.class_time|timeformat }})</h3>
+      </div>
+      <!-- Attendance Table for the class -->
+      <table class="att-table" id="{{ class.class_name|replace(' ', '') }}AttendanceTable">
+        <thead>
+          <tr>
+            <th>Student DP</th>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for attendance in class.attendance %}
+          <tr>
+            <td>
+              {% if attendance.student %}
+              <img src="{{ attendance.student.profile_pic or url_for('static', filename='images/User.jpg') }}"
+                style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+              {% else %}
+              <img src="{{ url_for('static', filename='images/User.jpg') }}"
+                style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+              {% endif %}
+            </td>
+            <td>{{ attendance.student_name }}</td>
+            <td>{{ attendance.enroll_number }}</td>
+            <td>{{ attendance.status|capitalize }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <!-- Class Total -->
+      <div class="att-class-total">
+        Total Students in {{ class.class_name }}: {{ class.attendance|length }}
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Overall Attendance Summary -->
+    <div class="att-summary" id="attendanceSummary">
+      {% set total_students = 0 %}
+      {% set present_count = 0 %}
+      {% set absent_count = 0 %}
+      {% set late_count = 0 %}
+      {% for class in classes %}
+      {% for attendance in class.attendance %}
+      {% set total_students = total_students + 1 %}
+      {% if attendance.status == 'present' %}
+      {% set present_count = present_count + 1 %}
+      {% elif attendance.status == 'absent' %}
+      {% set absent_count = absent_count + 1 %}
+      {% elif attendance.status == 'late' %}
+      {% set late_count = late_count + 1 %}
+      {% endif %}
+      {% endfor %}
+      {% endfor %}
+      <p><strong>Overall:</strong> {{ percent_present }}% Present, {{ percent_absent }}% Absent, {{ percent_late }}%
+        Late</p>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/Teacher_Dashboard.js') }}" defer></script>
+<script>
+  // (Optional JavaScript can be added here if you want to process the date filter via AJAX)
+</script>
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends "student/base.html" %}
+{% block title %}Messages – LearnieVerse{% endblock %}
+
+{% block content %}
+<div class="messages-dashboard">
+  <div class="institute-info">
+    <h1>{{ session.institute_name }}</h1>
+    <h2>Messages Dashboard</h2>
+  </div>
+
+  <div class="cards-container">
+    <div class="messages-cards">
+      <h3 class="section-title">Your Messages</h3>
+
+      <!-- Chat Window -->
+      <div class="chat-window card" style="padding: 1rem; margin-top: 1rem; height: 70vh; display: flex; flex-direction: column;">
+        <h4 id="chatWith" style="margin-bottom: 1rem;">Select a contact to view messages</h4>
+        <div id="chatMessages" class="chat-messages" style="flex: 1; overflow-y: auto;"></div>
+
+        <!-- New Message Form -->
+        <div class="chat-form" style="margin-top: 1rem; display: flex; gap: 8px;">
+          <input type="text" id="newMsgContent" placeholder="Type your message…" style="flex:1;" />
+          <button id="sendMsgBtn">Send</button>
+        </div>
+
+        <!-- Hidden select to store recipient ID -->
+        <select id="recipientSelect" style="display: none;"></select>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block right_panel %}
+<aside class="right-panel" style="overflow-y:auto;">
+  <h4 style="margin-top: 1rem;">Contacts</h4>
+  <ul id="contacts" class="contacts-list" style="list-style: none; padding: 0;">
+    {% for r in recipients %}
+      <li data-id="{{ r.id }}" class="contact-item" style="padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong>{{ r.email }}</strong><br>
+            <small>{{ r.type }}</small>
+          </div>
+          {% if r.unread and r.unread > 0 %}
+            <span class="new-msg-indicator">{{ r.unread }}</span>
+          {% endif %}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</aside>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  let currentReceiver = null;
+
+  function sortContactsByUnread() {
+    const contactsList = document.getElementById('contacts');
+    const items = Array.from(contactsList.children);
+    items.sort((a, b) => {
+      const aCount = parseInt(a.querySelector('.new-msg-indicator')?.textContent || 0);
+      const bCount = parseInt(b.querySelector('.new-msg-indicator')?.textContent || 0);
+      return bCount - aCount;
+    });
+    items.forEach(item => contactsList.appendChild(item));
+  }
+  sortContactsByUnread();
+
+  // Poll unread counts every 10s and re-sort
+  setInterval(() => {
+    fetch('{{ url_for("student.get_unread_counts") }}')
+      .then(r => r.json())
+      .then(data => {
+        document.querySelectorAll('.contact-item').forEach(item => {
+          const id = item.dataset.id;
+          const count = data[id] || 0;
+          let badge = item.querySelector('.new-msg-indicator');
+          if (count > 0) {
+            if (!badge) {
+              badge = document.createElement('span');
+              badge.className = 'new-msg-indicator';
+              item.querySelector('div').appendChild(badge);
+            }
+            badge.textContent = count;
+          } else if (badge) {
+            badge.remove();
+          }
+        });
+        sortContactsByUnread();
+      });
+  }, 10000);
+
+  // Fetch and display conversation for a given user
+  function loadConversation(userId) {
+    currentReceiver = userId;
+    document.getElementById('recipientSelect').value = userId;
+    const chatHeader = document.getElementById('chatWith');
+    const contentBox = document.getElementById('chatMessages');
+
+    chatHeader.textContent = 'Chat with ' + document.querySelector(`.contact-item[data-id="${userId}"] strong`).innerText;
+    contentBox.innerHTML = '<p><em>Loading messages...</em></p>';
+
+    fetch(`/student/messages/conversation/${userId}`)
+      .then(res => res.json())
+      .then(data => {
+        contentBox.innerHTML = '';
+        data.forEach(m => {
+          const div = document.createElement('div');
+          div.className = 'chat-message ' + (m.sender_id == '{{ session.user_id }}' ? 'my-message' : '');
+          div.innerHTML = `
+            <p><strong>${m.sender_id == '{{ session.user_id }}' ? 'You' : m.sender_email}:</strong> ${m.content}</p>
+            <small style="color:#777;">${m.created_at}</small>
+          `;
+          contentBox.append(div);
+        });
+        contentBox.scrollTop = contentBox.scrollHeight;
+      });
+  }
+
+  // Attach click handlers to contacts
+  document.querySelectorAll('.contact-item').forEach(item => {
+    item.addEventListener('click', () => {
+      loadConversation(parseInt(item.dataset.id, 10));
+    });
+  });
+
+  // Auto-refresh current conversation every 10s
+  setInterval(() => {
+    if (currentReceiver) {
+      loadConversation(currentReceiver);
+    }
+  }, 10000);
+
+  // Send Message on button click or Enter key
+  document.getElementById('sendMsgBtn').onclick = () => {
+    const content = document.getElementById('newMsgContent').value.trim();
+    if (!currentReceiver || !content) {
+      return alert('Please choose a recipient and type a message.');
+    }
+    fetch("{{ url_for('student.send_message_student') }}", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ receiver_id: currentReceiver, content })
+    })
+    .then(r => r.json())
+    .then(js => {
+      if (js.success) {
+        loadConversation(currentReceiver); // reload messages including the new one
+        document.getElementById('newMsgContent').value = '';
+      } else {
+        alert(js.error || 'Send failed');
+      }
+    });
+  };
+
+  document.getElementById('newMsgContent').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      document.getElementById('sendMsgBtn').click();
+    }
+  });
+</script>
+{% endblock %}

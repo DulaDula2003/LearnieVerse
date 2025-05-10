@@ -1,0 +1,51 @@
+{% extends "teacher/base.html" %}
+
+{% block title %}LearnieVerse - Manage Classes{% endblock %}
+
+{% block content %}
+  <div class="institute-info">
+    <h1>{{ institute_name }}</h1>
+    <h2>Manage Classes</h2>
+  </div>
+  
+  <!-- Classes Management Panel -->
+  <div class="cards-container">
+    <!-- Add New Class Button -->
+    <a href="{{ url_for('teacher.add_new_class') }}" class="btn" style="text-align: center;">+ Add New Class</a>
+
+    <!-- Existing Classes List -->
+    <div class="card">
+      <h4>Your Classes</h4>
+      <ul>
+        {% for class in classes %}
+        <li>
+          <span class="class-name">{{ class.class_name }}</span>
+          <span class="class-time">{{ '%02d:%02d' | format(class.class_time.seconds // 3600, (class.class_time.seconds // 60) % 60) }} on {{ class.class_date.strftime('%d %b %Y') }}</span>
+          <div class="class-actions">
+            <a href="{{ url_for('teacher.take_class', class_id=class.id) }}" class="btn take-class-btn">Take Class</a>
+            <a href="{{ url_for('teacher.edit_class', class_id=class.id) }}" class="btn edit-btn">Edit</a>
+            <!-- New buttons for live session management -->
+            <a href="{{ url_for('teacher.make_class_live', class_id=class.id) }}" class="btn live-btn">Make Live</a>
+            <a href="{{ url_for('teacher.end_class_live', class_id=class.id) }}" class="btn end-live-btn">End Live</a>
+            <form method="POST" action="{{ url_for('teacher.delete_class', class_id=class.id) }}" style="display: inline;">
+              <button type="submit" class="btn delete-btn">Delete</button>
+            </form>
+          </div>
+        </li>
+        {% else %}
+        <li>No classes created yet.</li>
+        {% endfor %}
+      </ul>
+      
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/Teacher_Dashboard.js') }}"></script>
+  <script>
+    // Optional: Add event listeners for "Edit", "Delete", "Make Live", and "End Live" actions if needed.
+    const editButtons = document.querySelectorAll('.class-actions a.edit-btn');
+    const deleteButtons = document.querySelectorAll('.class-actions a.delete-btn');
+  </script>
+{% endblock %}

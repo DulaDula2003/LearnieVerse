@@ -1,0 +1,62 @@
+{% extends "institute/base.html" %}
+
+{% block title %}LearnieVerse - {{ student.student_name }}{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ institute.institution_name }}</h1>
+  <h2>Student Profile</h2>
+</div>
+
+<div class="profile-container">
+  <div class="profile-header">
+    {% if student.profile_pic %}
+    <img src="{{ url_for('static', filename='uploads/' ~ student.profile_pic) }}" alt="Profile Picture" class="profile-img" />
+    {% else %}
+    <img src="{{ url_for('static', filename='images/User.jpg') }}" alt="Display Picture" class="profile-picture">
+    {% endif %}
+    <div class="profile-info">
+      <h2>{{ student.student_name }}</h2>
+      <p>ID: {{ student.enroll_number }}</p>
+    </div>
+  </div>
+  <div class="profile-details">
+    <p><strong>Email:</strong> {{ student.email or 'N/A' }}</p>
+    <p><strong>Course:</strong> {{ student.course }}</p>
+    <p><strong>Date of Birth:</strong> {{ student.dob }}</p>
+    <p><strong>Address:</strong> {{ student.address }}, {{ student.city }}, {{ student.state }}</p>
+  </div>
+  <div class="profile-extra">
+    <h3>Attendance</h3>
+<p>{{ attendance_pct }}% attendance rate</p>
+
+
+<h3>Grades</h3>
+{% if grades %}
+<ul>
+  {% for grade in grades %}
+  <li>{{ grade.subject_name }}: {{ grade.percentage }}% ({{ grade.marks }} marks)</li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No grades available.</p>
+{% endif %}
+
+
+<h3>Notifications</h3>
+{% if notifications %}
+<ul>
+  {% for note in notifications %}
+  <li>{{ note.title }} on {{ note.test_date.strftime('%b %d, %Y') }}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No upcoming tests or projects.</p>
+{% endif %}
+
+  </div>
+</div>
+{% endblock %}
+
+{% block right_panel %}{% endblock %}
+{% block scripts %}{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "admin/base.html" %}
+
+{% block title %}LearnieVerse Admin - Statistics{% endblock %}
+
+{% block content %}
+  <div class="institute-info">
+    <h1>Statistics</h1>
+  </div>
+
+  <div class="cards-container">
+    <div class="stats-container">
+
+      <!-- User Statistics Card -->
+      <div class="stats-card">
+        <h4>User Statistics</h4>
+        <p>Total Users: {{ total_users }}</p>
+        <p>New Registrations (Last Month): {{ new_users }}</p>
+        <div class="fixed-chart">
+          <canvas id="userChart" width="300" height="200"></canvas>
+        </div>
+      </div>
+
+      <!-- Institute Statistics Card -->
+      <div class="stats-card">
+        <h4>Institute Statistics</h4>
+        <p>Total Institutes: {{ total_institutes }}</p>
+        <p>Approved: {{ approved_institutes }}</p>
+        <p>Pending Requests: {{ pending_institutes }}</p>
+        <div class="fixed-chart">
+          <canvas id="instituteChart" width="300" height="200"></canvas>
+        </div>
+      </div>
+
+      <!-- System Performance Card -->
+      <div class="stats-card">
+        <h4>System Performance</h4>
+        <p>Server Uptime: 99.9%</p>
+        <p>Average Response Time: 200ms</p>
+        <div class="chart-placeholder">Performance Graph</div>
+      </div>
+
+      <!-- Financial Overview Card -->
+      <div class="stats-card">
+        <h4>Financial Overview</h4>
+        <p>Total Revenue: $25,000</p>
+        <p>Monthly Growth: 5%</p>
+        <div class="chart-placeholder">Revenue Chart</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // User Chart
+    new Chart(document.getElementById('userChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Total Users', 'New Users (30d)'],
+        datasets: [{
+          label: 'Users',
+          data: [{{ total_users }}, {{ new_users }}],
+          backgroundColor: ['#36A2EB', '#4BC0C0'],
+          borderColor: ['#2a8bc2', '#379f9f'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    // Institute Chart
+    new Chart(document.getElementById('instituteChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Approved', 'Pending'],
+        datasets: [{
+          label: 'Institutes',
+          data: [{{ approved_institutes }}, {{ pending_institutes }}],
+          backgroundColor: ['#4CAF50', '#FFC107'],
+          borderColor: ['#388E3C', '#FFA000'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+  </script>
+{% endblock %}

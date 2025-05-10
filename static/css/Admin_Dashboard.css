@@ -1,0 +1,632 @@
+/* ---------------------------------------------------------- */
+/* 1) Base & Font Settings                                    */
+/* ---------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: #0c4b77;  /* Updated background color */
+  font-size: clamp(14px, 1.5vw, 16px);
+  color: #000;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: #0c4b77;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #559bcd;
+  }
+
+/* ---------------------------------------------------------- */
+/* 2) Overall Container Layout                                */
+/* ---------------------------------------------------------- */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------- */
+/* 3) Left Sidebar (updated colors)                           */
+/* ---------------------------------------------------------- */
+.sidebar {
+  flex: 0 0 250px;
+  background: #0C4B77;  /* Updated sidebar color */
+  padding: 20px;
+  padding-right: 0;
+  display: flex;
+  flex-direction: column;
+  color: #fff;  /* Ensure text in the sidebar is white */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #D59A9A;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  object-fit: cover;
+  background: #fff;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 24px);
+  line-height: 30px;
+  color: #fff;  /* Updated logo text color */
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  font-size: clamp(16px, 2vw, 18px);
+  text-decoration: none;
+  color: #fff;  /* Updated menu item text color */
+  margin: 8px 0;
+  padding: 6px 10px;
+  border-radius: 8px 0 0 8px;
+  transition: background 0.2s;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.menu-item.active {
+  background: #e6edf1;   /* White background for active item */
+  color: #0C4B77;    /* Text color that matches the sidebar for contrast */
+  font-weight: 600;
+  border: 1px solid #e6edf1;
+}
+
+/* ---------------------------------------------------------- */
+/* 4) Main Content & Updated Cards Layout                     */
+/* ---------------------------------------------------------- */
+.main-content {
+  flex: 1;
+  background: #E6EDF1;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Institute Info */
+.institute-info h1 {
+  font-size: 32px;
+  color: #333;
+}
+
+.institute-info h2 {
+  font-size: 24px;
+  font-weight: 500;
+  color: #666;    
+  margin-bottom: 10px;
+}
+
+/* Optional Profile Pic in the header (if used) */
+.profile-picture {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 10px;
+}
+
+/* Cards Container: the big box around all dashboard cards */
+.cards-container {
+  flex: 1;
+  display: flex;
+  border-radius: 10px;
+  padding: 20px;
+  background: #f5f5f5;
+  margin-top: 10px; /* Some spacing from the institute-info area */
+  gap: 15px;
+  flex-direction: column;
+}
+
+/* Section Title (above the rows) */
+.section-title {
+  font-size: clamp(18px, 2.5vw, 20px);
+  font-weight: 600;
+}
+
+/* Row Layouts for cards */
+.row {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+}
+
+/* Each Card */
+.card {
+  flex: 1;
+  display: flex;
+  height: 25vh;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #0c4b77;
+  border-radius: 5px;
+  font-size: clamp(16px, 2vw, 18px);
+  font-weight: 500;
+  text-align: left;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+.card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* For card headings */
+.card h4 {
+  margin-bottom: 10px;
+  font-size: clamp(18px, 2.5vw, 20px);
+  font-weight: 600;
+}
+
+/* Quick links inside a card */
+.links {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.links a {
+  background: #CBDEBD;
+  color: #fff;
+  padding: 11px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  border: 1px solid white;
+  font-size: clamp(14px, 2vw, 16px);
+}
+
+.links a:hover {
+  background-color: #fff;
+  color: #CBDEBD;
+  border-color: #CBDEBD;
+}
+
+/* Upcoming Classes Styling */
+.upcoming-classes ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subject {
+  font-weight: 600;
+  color: #007BFF;
+}
+
+.time {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Messages Styling */
+.messages ul li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.messages ul li i {
+  color: #28a745;
+}
+
+/* Card lists */
+.card ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  width: 100%;
+}
+  
+.card ul li {
+  font-size: medium;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+  
+.card ul li:last-child {
+  border-bottom: none;
+}
+
+/* Utility Width Classes for Cards */
+.half-width-card {
+  flex: 1;
+  height: auto;
+}
+
+.two-thirds-width-card {
+  height: auto;
+  flex: 1;
+}
+
+.one-third-width-card {
+  flex: 1;
+}
+
+/* Table Styling */
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.styled-table thead tr {
+  background-color: #0C4B77;
+  color: #fff;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* Form & Button Tweaks */
+.full-width-input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+}
+
+.full-width-button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #0C4B77;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.full-width-button:hover {
+  background-color: #347bae;
+}
+
+/* Links in the "User Actions" card */
+.card ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.card ul li {
+  margin-bottom: 8px;
+}
+
+.card ul li a {
+  text-decoration: none;
+  color: #0C4B77;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.card ul li a:hover {
+  color: #347bae;
+}
+/* Institute Management Table: Action Tabs */
+.institute-table .action-tabs {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .institute-table .action-btn {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #0C4B77;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  
+  .institute-table .action-btn:hover {
+    background-color: #347bae;
+  }
+  
+  /* User List Card Styling */
+  .user-list-card {
+    flex: 1;
+    display: flex;
+    border-radius: 10px;
+    padding: 20px;
+    background: #f5f5f5;
+    margin-top: 10px;
+    gap: 15px;
+    flex-direction: column;
+}
+
+/* Flexbox for Search, Filter, and Button */
+.search-filter-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.search-filter-container input,
+.search-filter-container select {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.search-filter-container button {
+  background: #0c4b77;
+  color: white;
+  border: 1px solid;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.search-filter-container button:hover{
+    background: #f5f5f5;
+  border-color: #0c4b77;
+  color: #0c4b77;
+}
+
+
+.styled-table th,
+.styled-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.styled-table th {
+  background: #0c4b77;
+  color: white;
+}
+
+/* Action Buttons */
+.action-tabs {
+  display: flex;
+  gap: 5px;
+}
+
+.action-btn {
+  padding: 5px 10px;
+  background: #0c4b77;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  border: 1px solid #0c4b77;
+}
+
+.action-btn:hover {
+  background: #f5f5f5;
+  border-color: #0c4b77;
+  color: #0c4b77;
+}
+
+/* Request Tab */
+/* Additional CSS for the Requests tab */
+.request-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 20px;
+    background: #f5f5f5;
+    margin-top: 10px;
+  }
+  /* Optional: Inline Search & Filter for Requests */
+  .search-filter-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  .search-filter-container input,
+  .search-filter-container select {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  .search-filter-container button {
+    background: #0c4b77;
+    color: white;
+    border: 1px solid #0c4b77;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .search-filter-container button:hover {
+    background: #f5f5f5;
+    border-color: #0c4b77;
+    color: #0c4b77;
+  }
+  /* Action Buttons for Updating Request Status */
+  .action-tabs {
+    display: flex;
+    gap: 5px;
+  }
+  .action-btn {
+    padding: 5px 10px;
+    background: #0c4b77;
+    color: white;
+    border: 1px solid #0c4b77;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  .action-btn:hover {
+    background: #f5f5f5;
+    border-color: #0c4b77;
+    color: #0c4b77;
+  }
+
+  /* Statistics */
+   /* Additional CSS for the Statistics tab */
+   .stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .stats-card {
+    flex: 1 1 calc(50% - 15px);
+    background: #fff;
+    border: 1px solid #0c4b77;
+    border-radius: 5px;
+    padding: 15px;
+    box-sizing: border-box;
+  }
+  .stats-card h4 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: #0c4b77;
+  }
+  .stats-card p {
+    font-size: 1rem;
+    color: #333;
+    margin: 5px 0;
+  }
+  .chart-placeholder {
+    width: 100%;
+    height: 200px;
+    background: #f0f0f0;
+    border: 1px dashed #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 1.2rem;
+    margin-top: 10px;
+  }
+  /* Responsive: Two cards per row on larger screens, full width on mobile */
+  @media (max-width: 768px) {
+    .stats-card {
+      flex: 1 1 100%;
+    }
+  }
+
+  /* Settings Tab */
+  /* Additional CSS for the Settings tab */
+  .settings-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background: #f5f5f5;
+    gap: 15px;
+  }
+  .settings-card h4 {
+    font-size: 1.2rem;
+    color: #0c4b77;
+    margin-bottom: 10px;
+  }
+  .settings-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .settings-form-group label {
+    font-size: 1rem;
+    color: #333;
+  }
+  .settings-form-group input,
+  .settings-form-group select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  .checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .settings-save-btn {
+    background: #0c4b77;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    align-self: flex-start;
+    transition: background 0.2s;
+  }
+  .settings-save-btn:hover {
+    background: #347bae;
+  }
+
+  input[type="checkbox" i] {
+    all: unset;
+    width: 15px;
+    height: 15px;
+    border: 1px solid #0c4b77;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 2px; /* optional for slight rounding */
+  }
+  
+  input[type="checkbox" i]:checked {
+    background-color: #0c4b77;
+  }
+
+  .logout-btn {
+    background: #FF6B6B;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+  }
+  
+  .logout-btn:hover {
+    background: #E63946;
+  }
+  

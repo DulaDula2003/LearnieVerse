@@ -1,0 +1,75 @@
+{% extends "teacher/base.html" %}
+
+{% block title %}LearnieVerse - Assignments &amp; Grading{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ institute_name }}</h1>
+  <h2>Assignments &amp; Grading</h2>
+</div>
+
+
+<div class="cards-container" style="overflow-y: auto;">
+  <div class="card" style="flex: 2;">
+    <div class="sort-container" style="margin-bottom:1rem;width: 100%;justify-content: space-between;">
+      <h4>Your Tests</h4>
+      <form method="get">
+        <select id="filterSelect" class="sort-dropdown" style="width: 100%;" name="filter" onchange="this.form.submit()">
+          <option value="all"       {% if filter_by=='all' %}selected{% endif %}>All Tests</option>
+          <option value="graded"    {% if filter_by=='graded' %}selected{% endif %}>Graded Tests</option>
+          <option value="ungraded"  {% if filter_by=='ungraded' %}selected{% endif %}>Ungraded Tests</option>
+          <option value="not_taken" {% if filter_by=='not_taken' %}selected{% endif %}>Not Taken</option>
+        </select>
+      </form>
+    </div>
+    
+    {% if tests and tests|length > 0 %}
+    <ul class="test-list">
+      {% for t in tests %}
+      <li>
+        <span class="test-title">{{ t.title }}</span>
+        <span class="test-date">{{ t.test_date.strftime('%Y-%m-%d') }}</span>
+        <a href="{{ url_for('teacher.grade_assignment', test_id=t.id) }}" class="btn">Grade</a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p><i class="fas fa-info-circle"></i> No tests found under this filter.</p>
+    {% endif %}
+  </div>
+
+
+<!-- New Card: Making Report as a List -->
+<div class="row rp-row">
+  <div class="card make-report-card">
+    <h4>Make Reports</h4>
+    {% if students and students|length %}
+    <ul class="report-list">
+      {% for stu in students %}
+      <li>
+        <span><strong>Student:</strong> {{ stu.student_name }}</span>
+        <span><strong>Class:</strong> {{ stu.course or '—' }}</span>
+        
+        {% if stu.report_made %}
+          <!-- If report is already made, show 'Done' button -->
+          <span class="btn done-btn">Done</span>
+        {% else %}
+          <!-- Otherwise, show 'Make Report' button -->
+          <a href="{{ url_for('teacher.make_report', student_id=stu.id) }}" class="btn">Make Report</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p><i class="fas fa-info-circle"></i> No students to report on.</p>
+    {% endif %}
+  </div>
+</div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/Teacher_Dashboard.js') }}"></script>
+<!-- Additional scripts if needed -->
+{% endblock %}

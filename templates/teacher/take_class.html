@@ -1,0 +1,118 @@
+{% extends "teacher/base.html" %}
+
+{% block title %}Take Class - {{ class_info.class_name }}{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+    <h1>{{ class_info.class_name }}</h1>
+    <h2>Take Class</h2>
+</div>
+
+<div class="cards-container">
+    <!-- Attendance Section -->
+    <div class="class-attendance-container">
+        <h3>Student Attendance</h3>
+        <form method="POST">
+            <input type="hidden" name="attendance_submit" value="1">
+            <table class="students-table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Status</th>
+                        <th>Attendance</th>
+                        <th>Mark Attendance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if students %}
+                    {% for student in students %}
+                    {% if student.status != 'Not Joined' %}
+                    <tr>
+                        <td>
+                            {{ student.student_name }}
+                            <div style="font-size: 0.85em; color: gray;">
+                                <strong>Joined</strong>: {{ student.join_count }}x || <strong>Left</strong>: {{ student.leave_count }}x ||
+                                <strong>Last Join</strong>:
+                                {{ student.last_join.strftime('%d %b %Y, %I:%M %p') if student.last_join else 'N/A' }}
+                                ||
+                                <strong>Last Leave</strong>:
+                                {{ student.last_leave.strftime('%d %b %Y, %I:%M %p') if student.last_leave else 'N/A' }}
+                            </div>
+                        </td>
+                        <td>
+                            {% if student.status == 'In Class' %}
+                            <span style="color: green;">🟢 {{ student.status }}</span>
+                            {% elif student.status == 'Left Class' %}
+                            <span style="color: orange;">🔴 {{ student.status }}</span>
+                            {% else %}
+                            <span style="color: gray;">⚪️ {{ student.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if student.attendance_status == 'Present' %}
+                            <span style="color: green;"><strong>{{ student.attendance_status }}</strong></span>
+                            {% elif student.attendance_status == 'Absent' %}
+                            <span style="color: red;"><strong>{{ student.attendance_status }}</strong></span>
+                            {% else %}
+                            <span style="color: gray;"><strong>Pending</strong></span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <select name="attendance_{{ student.id }}">
+                                <option value="">-- Mark --</option>
+                                <option value="present">Present</option>
+                                <option value="absent">Absent</option>
+                            </select>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: gray;">No students have joined this class yet.
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn" style="margin-top: 10px;">Update Attendance</button>
+            <div style="display: inline; float: right; margin-top: 10px;">
+                <button class="btn video-call-btn" type="button" onclick="startVideoCall()">Start Video Call</button>
+                <a href="{{ url_for('teacher.end_class_live', class_id=class_info.id) }}" class="btn btn1" style="margin-left: 10px;">End Class</a>
+            </div>            
+        </form>        
+    </div>
+
+    <!-- Chat Section -->
+    <div class="class-chat-container">
+        <h3>Class Chat</h3>
+        <div class="chat-messages"
+            style="border: 1px solid #ddd; padding: 10px; max-height: 300px; overflow-y: auto; margin-bottom: 10px;">
+            {% for msg in chats %}
+            <div class="chat-message"
+                style="margin-bottom: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px;     overflow-wrap: break-word;">
+                <strong>{{ msg.sender_email }}</strong>: {{ msg.message }} <small style="font-size: 0.8em;">({{
+                    msg.created_at }})</small>
+            </div>
+            {% else %}
+            <p>No messages yet.</p>
+            {% endfor %}
+        </div>
+        <form method="POST" action="{{ url_for('teacher.add_class_chat', class_id=class_info.id) }}" class="msg"
+            style="display: flex; width: 100%; gap: 8px;">
+            <input type="text" name="chat_message" placeholder="Type your message here..." required
+                style="flex: 1; padding: 8px;">
+            <button type="submit" class="btn" style="padding: 8px 16px;">Send</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function startVideoCall() {
+        alert("Video call functionality coming soon!");
+    }
+</script>
+{% endblock %}
+{% block right_panel %}{% endblock %}

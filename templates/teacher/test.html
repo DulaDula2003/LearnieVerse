@@ -1,0 +1,87 @@
+{% extends "teacher/base.html" %}
+
+{% block title %}LearnieVerse - Make &amp; Take Test{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ institute_name }}</h1>
+  <h2>Create Test Questions</h2>
+</div>
+
+<!-- MCQ Test Creation Container -->
+<div class="mcq-container">
+  <h3>Create Test Questions</h3>
+  <form id="createTestForm" method="POST">
+    <!-- Hidden field to pass test_id -->
+    <input type="hidden" name="test_id" value="{{ test_id }}" />
+
+    <!-- Questions Section -->
+    <div id="questionsContainer">
+      <!-- Default Question Block -->
+      <div class="question-item">
+        <label>Question 1:</label>
+        <input type="text" name="question[]" placeholder="Enter question text" required>
+        <div class="options">
+          <div class="option">
+            <input type="radio" name="correct_answer_1" value="0" required>
+            <input type="text" name="option_1[]" placeholder="Option 1" required>
+          </div>
+          <div class="option">
+            <input type="radio" name="correct_answer_1" value="1">
+            <input type="text" name="option_1[]" placeholder="Option 2" required>
+          </div>
+          <div class="option">
+            <input type="radio" name="correct_answer_1" value="2">
+            <input type="text" name="option_1[]" placeholder="Option 3" required>
+          </div>
+          <div class="option">
+            <input type="radio" name="correct_answer_1" value="3">
+            <input type="text" name="option_1[]" placeholder="Option 4" required>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <button type="button" id="addQuestion" class="add-question-btn">+ Add Question</button>
+    <button type="submit" class="submit-test-btn">Submit Test</button>
+  </form>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    let questionCount = 1;
+    const questionsContainer = document.getElementById('questionsContainer');
+    const addQuestionBtn = document.getElementById('addQuestion');
+    
+    addQuestionBtn.addEventListener('click', function () {
+      questionCount++;
+      const questionDiv = document.createElement('div');
+      questionDiv.className = 'question-item';
+      questionDiv.innerHTML = `
+        <label>Question ${questionCount}:</label>
+        <input type="text" name="question[]" placeholder="Enter question text" required>
+        <div class="options">
+          <div class="option">
+            <input type="radio" name="correct_answer_${questionCount}" value="0" required>
+            <input type="text" name="option_${questionCount}[]" placeholder="Option 1" required>
+          </div>
+          <div class="option">
+            <input type="radio" name="correct_answer_${questionCount}" value="1">
+            <input type="text" name="option_${questionCount}[]" placeholder="Option 2" required>
+          </div>
+          <div class="option">
+            <input type="radio" name="correct_answer_${questionCount}" value="2">
+            <input type="text" name="option_${questionCount}[]" placeholder="Option 3" required>
+          </div>
+          <div class="option">
+            <input type="radio" name="correct_answer_${questionCount}" value="3">
+            <input type="text" name="option_${questionCount}[]" placeholder="Option 4" required>
+          </div>
+        </div>
+      `;
+      questionsContainer.appendChild(questionDiv);
+    });
+  });
+</script>
+<script src="{{ url_for('static', filename='js/Teacher_Dashboard.js') }}" defer></script>
+{% endblock %}  
+{% block right_panel %}{% endblock %}

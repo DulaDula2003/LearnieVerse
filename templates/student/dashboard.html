@@ -1,0 +1,107 @@
+{% extends "student/base.html" %}
+{% block title %}LearnieVerse – Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ institute_name }}</h1>
+  <h2>Student Dashboard</h2>
+</div>
+
+<div class="cards-container">
+  <div class="row top-row" style="display:flex; gap:1rem;">
+    <!-- Quick Links -->
+    <div class="card" style="flex:1;">
+      <h4>Quick Links</h4>
+      <div class="links" style="display:flex; flex-direction:column; gap:.5rem;">
+        <a href="{{ url_for('student.assignments') }}">Assignments</a>
+        <a href="{{ url_for('student.messages') }}">Messages</a>
+        <a href="{{ url_for('student.classes') }}">Schedule</a>
+        <a href="{{ url_for('student.reports') }}">Performance</a>
+      </div>
+    </div>
+
+    <!-- Upcoming Classes -->
+    <div class="card upcoming-classes" style="flex:1;">
+      <h4>Upcoming Classes</h4>
+      <ul>
+        {% for cls in upcoming_classes %}
+        <li>
+          {{ cls.class_name }} —
+          {{ cls.class_time }},
+          {{ cls.class_date }}
+        </li>
+        {% else %}
+        <li>No upcoming classes.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Recent Announcements -->
+    <div class="card announcements" style="flex:1;">
+      <h4>Latest Announcements</h4>
+      <ul>
+        {% for ann in recent_announcements %}
+        <li>
+          <strong>{{ ann.title }}</strong>
+          <p>{{ ann.content|truncate(60) }}</p>
+          <small>{{ ann.ts }}</small>
+        </li>
+        {% else %}
+        <li>No announcements.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="row middle-row" style="display:flex; gap:1rem; margin-top:2rem;">
+    <!-- Performance Overview -->
+    <div class="card" style="flex:1;">
+      <h4>Performance Overview</h4>
+      <canvas id="perfChart" style="max-width:100%; height:200px;"></canvas>
+    </div>
+
+    <!-- Recent Reports -->
+    <div class="card" style="flex:1;">
+      <h4>Recent Reports</h4>
+      <ul>
+        {% for r in recent_reports %}
+        <li>
+          {{ r.date }} —
+          {{ r.academic_year }}:
+          {{ r.total_percentage }}%
+        </li>
+        {% else %}
+        <li>No reports available.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<!-- Chart.js from CDN (add to your base.html <head> or here) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('perfChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{ perf_labels| tojson }},
+    datasets: [{
+      label: 'Score (%)',
+      data: {{ perf_scores| tojson }},
+    fill: false,
+    borderWidth: 2
+        }]
+      },
+    options: {
+    scales: {
+      y: { beginAtZero: true, max: 100 }
+    }
+  }
+    });
+</script>
+{% endblock %}

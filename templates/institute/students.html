@@ -1,0 +1,87 @@
+{% extends "institute/base.html" %}
+
+{% block title %}LearnieVerse - Students{% endblock %}
+
+{% block right_panel %}{% endblock %}
+
+{% block content %}
+<!-- Institute Title & Subtitle -->
+<div class="institute-info">
+  <h1>{{ institute.institution_name if institute else "Institute Name" }}</h1>
+  <h2>Students</h2>
+</div>
+
+<!-- Cards Container -->
+<div class="cards-container">
+  <!-- Students Information Box -->
+  <div class="students-info-container">
+    <!-- Flex header row: heading on left, search on right -->
+    <div class="search-header" style="display: flex; justify-content: space-between; align-items: center;">
+      <h3>Students Information</h3>
+      <div class="search-container">
+        <input type="text" id="studentSearchInput" placeholder="Search by name, enrollment, or status..." oninput="filterStudents()" />
+        <button type="button" class="search-btn" onclick="filterStudents()">Search</button>
+      </div>
+    </div>
+
+    <!-- Table of Students -->
+    <table class="students-table" id="studentsTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Enrollment</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if students %}
+        {% for student in students %}
+        <tr>
+          <td>{{ student.student_name }}</td>
+          <td>{{ student.enroll_number }}</td>
+          <td>{{ student.status if student.status else "Active" }}</td>
+          <td>
+            <a href="{{ url_for('institute.edit_student', student_id=student.id) }}" class="action-link edit-link">Edit</a> |
+            <form action="{{ url_for('institute.delete_student', student_id=student.id) }}" method="POST" style="display:inline;">
+              <button type="submit" class="action-link delete-link">Delete</button>
+            </form> |
+            <a href="{{ url_for('institute.student_profile', student_id=student.id) }}" class="action-link view-link">View</a>
+          </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+          <td colspan="4" style="text-align: center;">No students found.</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function filterStudents() {
+    const input = document.getElementById('studentSearchInput');
+    const filter = input.value.toUpperCase();
+    const table = document.getElementById('studentsTable');
+    const rows = table.getElementsByTagName('tr');
+    
+    // Loop through all rows, excluding the header
+    for (let i = 1; i < rows.length; i++) {
+      const cells = rows[i].getElementsByTagName('td');
+      
+      // Check if the student name, enrollment number, or status match the search
+      const name = cells[0].textContent || cells[0].innerText;
+      const enroll = cells[1].textContent || cells[1].innerText;
+      const status = cells[2].textContent || cells[2].innerText;
+      
+      if (name.toUpperCase().indexOf(filter) > -1 || enroll.toUpperCase().indexOf(filter) > -1 || status.toUpperCase().indexOf(filter) > -1) {
+        rows[i].style.display = ''; // Show matching row
+      } else {
+        rows[i].style.display = 'none'; // Hide non-matching row
+      }
+    }
+  }
+</script>
+{% endblock %}

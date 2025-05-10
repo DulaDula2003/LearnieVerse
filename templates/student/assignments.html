@@ -1,0 +1,116 @@
+{% extends "student/base.html" %}
+
+{% block title %}LearnieVerse - Exam Dashboard{% endblock %}
+
+{% block content %}
+  <div class="institute-info">
+    <h1>Institute Name</h1>
+    <h2>Exams Overview</h2>
+  </div>
+  
+  <div class="cards-container" style="
+  margin-top: 0;
+">
+    <!-- Top Row: Ongoing Exams & Upcoming Exams -->
+    <div class="row top-row">
+      <!-- Card 1: Ongoing Exams -->
+      <div class="card">
+        <h2 class="card-title">Ongoing Exams</h2>
+        {% if ongoing_exams %}
+          <ul>
+            {% for exam in ongoing_exams %}
+              <li class="exam-current">
+                {{ exam.title }} – {{ exam.test_date.strftime('%d %b %Y') }}
+                <a href="{{ url_for('student.take_test', test_id=exam.id) }}" class="btn small take-test">Take Test</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No ongoing exams right now.</p>
+        {% endif %}
+      </div>
+      
+      <!-- Card 2: Upcoming Exams -->
+      <div class="card">
+        <h2 class="card-title">Upcoming Exams</h2>
+        {% if upcoming_exams %}
+          <ul>
+            {% for exam in upcoming_exams %}
+            <li class="exam-upcoming">
+              {{ exam.title }} – Scheduled on {{ exam.test_date.strftime('%d %b %Y') }} at {{ exam.formatted_time }}
+            </li>                
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No upcoming exams.</p>
+        {% endif %}
+      </div>
+    </div>
+    
+    <!-- Bottom Row: Past Exams & Grade Report -->
+    <div class="row bottom-row">
+      <!-- Card 3: Past Exams -->
+      <div class="card">
+        <h2 class="card-title">Past Exams</h2>
+        {% if past_exams %}
+          <ul>
+            {% for exam in past_exams %}
+              <li class="exam-past">
+                {{ exam.title }} – Score: {{ exam.score }} ({{ exam.submitted_at.strftime('%d %b %Y') }})
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No past exam records.</p>
+        {% endif %}
+      </div>
+      
+      <!-- Card 4: Grade Report -->
+      <div class="card">
+        <h2 class="card-title">Grade Report</h2>
+        <canvas id="gradeChart" width="400" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = {{ labels | tojson }};
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'Score (%)',
+      data: {{ scores | tojson }},
+      backgroundColor: ['#10505B', '#62A6B9', '#8AC0C9', '#B4D6E0', '#D9ECF4'],  // Add more colors if needed
+      borderWidth: 1
+    }]
+  };
+
+  const config = {
+    type: 'pie',  // Changed from 'bar' to 'pie'
+    data: data,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top'
+        },
+        tooltip: {
+          callbacks: {
+            label: function(tooltipItem) {
+              return tooltipItem.label + ': ' + tooltipItem.raw + '%'; // Display percentage
+            }
+          }
+        }
+      }
+    }
+  };
+
+  new Chart(document.getElementById('gradeChart'), config);
+</script>
+
+
+{% endblock %}

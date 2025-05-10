@@ -1,0 +1,108 @@
+{% extends "teacher/base.html" %}
+{% block title %}LearnieVerse – Teacher Settings{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ institute_name }}</h1>
+  <h2>Profile & Settings</h2>
+</div>
+
+<div class="settings-container">
+  <!-- Profile Panel -->
+  <form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="profile">
+    <div class="setting-panel profile-info">
+      <h3>Profile Info</h3>
+      <div class="profile-details">
+        <div class="profile-dp">
+          {% if profile.profile_pic %}
+            <img src="{{ url_for('static', filename='uploads/' ~ profile.profile_pic) }}"
+                 class="profile-picture">
+          {% else %}
+            <img src="{{ url_for('static', filename='images/User.jpg') }}"
+                 class="profile-picture">
+          {% endif %}
+          <label for="dp-upload" class="change-dp-btn">Change Picture</label>
+          <input type="file" id="dp-upload" name="profile_pic" style="display:none">
+        </div>
+        <label>Full Name</label>
+        <input type="text" name="teacher_name" value="{{ profile.teacher_name }}" required>
+        <label>Email</label>
+        <input type="email" value="{{ profile.email }}" readonly>
+        <label>Phone</label>
+        <input type="tel" name="phone" value="{{ profile.phone }}">
+      </div>
+      <button class="save-btn">Save Changes</button>
+    </div>
+  </form>
+
+  <!-- Password Panel -->
+  <form method="POST">
+    <input type="hidden" name="action" value="password">
+    <div class="setting-panel password-settings">
+      <h3>Change Password</h3>
+      <label>Current</label>
+      <input type="password" name="current_password" required>
+      <label>New</label>
+      <input type="password" name="new_password" required>
+      <label>Confirm</label>
+      <input type="password" name="confirm_password" required>
+      <button class="save-btn">Update Password</button>
+    </div>
+  </form>
+
+  <!-- Appearance Panel -->
+  <form method="POST">
+    <input type="hidden" name="action" value="appearance">
+    <div class="setting-panel theme-settings">
+      <h3>Appearance</h3>
+      <label>Dark Mode</label>
+      <input type="checkbox" name="dark_mode"
+             {% if profile.dark_mode %}checked{% endif %}>
+      <button class="save-btn">Apply</button>
+    </div>
+  </form>
+
+  <!-- Complaint Panel -->
+  <form method="POST">
+    <input type="hidden" name="action" value="complaint">
+    <div class="setting-panel feedback-complaints">
+      <h3>Feedback / Complaint</h3>
+      <label>Category</label>
+      <select name="category">
+        <option value="student">Student</option>
+        <option value="institute">Institute</option>
+      </select>
+      <label>Against</label>
+      <select name="against_id">
+        {% for c in contacts %}
+          <option value="{{ c.id }}">{{ c.email }} ({{ c.type }})</option>
+        {% endfor %}
+      </select>
+      <label>Subject</label>
+      <input type="text" name="subject" maxlength="100" required>
+      <label>Details</label>
+      <textarea name="details" rows="4" required></textarea>
+      <div class="anonymous-option">
+        <input type="checkbox" name="anonymous" id="anonymous">
+        <label for="anonymous">Submit anonymously</label>
+      </div>
+      <button class="save-btn">Submit</button>
+    </div>
+  </form>
+</div>
+
+<div class="logout-section">
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function logout() {
+    window.location.href = "{{ url_for('auth.logout') }}";
+  }
+</script>
+{% endblock %}
+
+{% block right_panel %}{% endblock %}

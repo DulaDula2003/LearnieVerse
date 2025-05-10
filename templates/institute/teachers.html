@@ -1,0 +1,177 @@
+{% extends "institute/base.html" %}
+
+{% block title %}LearnieVerse - Teachers{% endblock %}
+
+{% block right_panel %}{% endblock %}
+
+{% block content %}
+  <!-- Institute Title & Subtitle -->
+  <div class="institute-info">
+    <h1>{{ institute.institution_name if institute else "Institute Name" }}</h1>
+    <h2>Teachers</h2>
+  </div>
+
+  <!-- Cards Container -->
+  <div class="cards-container">
+    <!-- Teachers Information Box -->
+    <div class="students-info-container">
+      <!-- Flex header row: heading on left, search on right -->
+      <div class="search-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h3>Teachers Information</h3>
+        <div class="search-container">
+          <input type="text" id="teacherSearchInput" placeholder="Search by name, ID, or department..." oninput="filterTeachers()" />
+          <button type="button" class="search-btn" onclick="filterTeachers()">Search</button>
+        </div>
+      </div>
+      
+      <!-- Table of Teachers -->
+      <table class="students-table" id="teachersTable">
+        <p id="noResults" style="display:none; text-align:center; color:#888;">No matching teachers found.</p>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Employee ID</th>
+            <th>Department</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for teacher in teachers %}
+          <tr>
+            <td>{{ teacher.teacher_name }}</td>
+            <td>{{ teacher.teacher_id }}</td>
+            <td>{{ teacher.department if teacher.department else "N/A" }}</td>
+            <td>
+              <a href="{{ url_for('institute.edit_teacher', teacher_id=teacher.id) }}" class="action-link edit-link">Edit</a> | 
+              <form action="{{ url_for('institute.delete_teacher', teacher_id=teacher.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="action-link delete-link">
+                  Delete </button>
+              </form>| 
+              <a href="{{ url_for('institute.teacher_profile', teacher_id=teacher.id) }}" class="action-link view-link">View</a>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="4">No teachers found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>  
+  </div>
+
+  <!-- Floating Plus Button to Open Invite Modal -->
+  <button id="openModalBtn" class="invite-btn">+</button>
+
+  <!-- Invite Modal -->
+  <div id="inviteModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span id="closeModalBtn" class="close-modal">&times;</span>
+      <h2>Invite a Teacher</h2>
+      <!-- Invite Form -->
+      <form id="inviteForm">
+        <input type="email" name="teacher_email" id="teacherEmail" placeholder="Enter teacher's email" required>
+        <button type="button" onclick="sendInvite()">Send Invite</button>
+      </form>
+      <div id="inviteResponse"></div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      console.log("Teacher tab script loaded");
+
+      // Get modal elements
+      const modal = document.getElementById("inviteModal");
+      const openModalBtn = document.getElementById("openModalBtn");
+      const closeModalBtn = document.getElementById("closeModalBtn");
+
+      if (!modal || !openModalBtn || !closeModalBtn) {
+        console.error("One or more modal elements not found!");
+        return;
+      }
+
+      // Open modal on plus button click
+      openModalBtn.addEventListener("click", function () {
+        console.log("Open Modal Clicked");
+        modal.style.display = "flex"; // Show modal
+      });
+
+      // Close modal on close button click
+      closeModalBtn.addEventListener("click", function () {
+        console.log("Close Modal Clicked");
+        modal.style.display = "none"; // Hide modal
+      });
+
+      // Close modal when clicking outside the modal content
+      window.addEventListener("click", function (e) {
+        if (e.target === modal) {
+          console.log("Clicked Outside Modal");
+          modal.style.display = "none";
+        }
+      });
+    });
+
+    // Function to send invite via AJAX
+    function sendInvite() {
+      const teacherEmail = document.getElementById("teacherEmail").value;
+      if (!teacherEmail) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      // Send AJAX request to the invite endpoint
+      fetch("{{ url_for('institute.invite_teacher') }}", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ teacher_email: teacherEmail })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          document.getElementById("inviteResponse").innerText = "Error: " + data.error;
+        } else {
+          document.getElementById("inviteResponse").innerText = "Invitation sent successfully! " + teacherEmail;
+          // Optionally close the modal after a short delay
+          setTimeout(() => {
+            document.getElementById("inviteModal").style.display = "none";
+            document.getElementById("inviteResponse").innerText = "";
+            document.getElementById("inviteForm").reset();
+          }, 2000);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Error sending invite.");
+      });
+    }
+
+    function filterTeachers() {
+      const input = document.getElementById("teacherSearchInput").value.toLowerCase();
+      const table = document.getElementById("teachersTable");
+      const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+      const noResults = document.getElementById("noResults");
+    
+      let visibleCount = 0;
+    
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+        if (cells.length < 3) continue; // Skip placeholder rows
+    
+        const name = cells[0]?.textContent.toLowerCase();
+        const empId = cells[1]?.textContent.toLowerCase();
+        const dept = cells[2]?.textContent.toLowerCase();
+    
+        const matches = [name, empId, dept].some(val => val.includes(input));
+        rows[i].style.display = matches ? "" : "none";
+    
+        if (matches) visibleCount++;
+      }
+    
+      noResults.style.display = visibleCount === 0 ? "block" : "none";
+    }
+    
+  </script>
+{% endblock %}

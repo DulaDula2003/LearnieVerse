@@ -1,0 +1,114 @@
+{% extends "student/base.html" %}
+{% block title %}LearnieVerse - Settings{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ session.institute_name }}</h1>
+  <h2>Settings</h2>
+</div>
+
+<div class="settings-container">
+
+  <!-- PROFILE FORM -->
+  <form method="post" action="{{ url_for('student.settings') }}" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="profile">
+    <div class="setting-panel profile-info">
+      <h3>Profile Information</h3>
+      <div class="profile-details">
+        <div class="profile-dp">
+          {% if profile.profile_pic %}
+          <img src="{{ url_for('static', filename='uploads/'+profile.profile_pic) }}" class="profile-picture" />
+          {% else %}
+          <img src="{{ url_for('static','images/User.jpg') }}" class="profile-picture" />
+          {% endif %}
+          <label for="dp-upload" class="change-dp-btn">Change Display Picture</label>
+          <input type="file" name="profile_pic" id="dp-upload" style="display:none;">
+        </div>
+        <label>Full Name</label>
+        <input type="text" name="student_name" value="{{ profile.student_name }}" required>
+        <label>Email (read‑only)</label>
+        <input type="email" value="{{ profile.email }}" readonly>
+        <label>Phone</label>
+        <input type="tel" name="phone" value="{{ profile.phone }}">
+      </div>
+      <button type="submit" class="save-btn">Save Profile</button>
+    </div>
+  </form>
+
+  <!-- PASSWORD FORM -->
+  <div class="setting-panel password-settings">
+    <form method="post" action="{{ url_for('student.settings') }}">
+      <input type="hidden" name="action" value="password">
+      <div class="password-details">
+        <h3>Change Password</h3>
+        <label>Current Password</label>
+        <input type="password" name="current_password" required>
+        <label>New Password</label>
+        <input type="password" name="new_password" required>
+        <label>Confirm New Password</label>
+        <input type="password" name="confirm_password" required>
+        <button type="submit" class="save-btn">Update Password</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- APPEARANCE FORM -->
+  <form method="post" action="{{ url_for('student.settings') }}">
+    <input type="hidden" name="action" value="appearance">
+    <div class="setting-panel theme-settings">
+      <h3>Appearance</h3>
+      <label>Dark Mode</label>
+      <input type="checkbox" name="dark_mode" {% if profile.dark_mode %}checked{% endif %}>
+      <button type="submit" class="save-btn">Save Appearance</button>
+    </div>
+  </form>
+
+  <!-- COMPLAINT FORM -->
+  <form id="complaintForm" method="post" action="{{ url_for('student.settings') }}">
+    <input type="hidden" name="action" value="complaint">
+    <div class="setting-panel feedback-complaints">
+      <h3>Feedback &amp; Complaints</h3>
+      <label for="against_id">I want to complain about:</label>
+      <select id="against_id" name="against_id" required>
+        <option value="">— Select —</option>
+        {% for c in contacts %}
+        <option value="{{ c.id }}">{{ c.email }} ({{ c.type }})</option>
+        {% endfor %}
+      </select>
+
+      <label for="category">Category:</label>
+      <select id="category" name="category" required>
+        <option value="teacher">Teacher</option>
+        <option value="institute">Institute</option>
+        <option value="student">Student</option>
+      </select>
+
+      <label for="subject">Subject:</label>
+      <input type="text" id="subject" name="subject" maxlength="100" required>
+
+      <div class="anonymous-option">
+        <input type="checkbox" id="anonymous" name="anonymous">
+        <label for="anonymous">Submit Anonymously</label>
+      </div>
+
+      <label for="details">Details:</label>
+      <textarea id="details" name="details" rows="4" required></textarea>
+
+      <button type="submit" class="save-btn">Submit Complaint</button>
+    </div>
+  </form>
+
+  <!-- LOGOUT -->
+  <div class="logout-section">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function logout() {
+    window.location.href = "{{ url_for('auth.logout') }}";
+  }
+</script>
+{% endblock %}{% block right_panel %}{% endblock %}

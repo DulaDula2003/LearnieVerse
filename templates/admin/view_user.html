@@ -1,0 +1,112 @@
+{% extends "admin/base.html" %}
+{% block title %}View {{ user.email }}{% endblock %}
+
+{% block content %}
+<style>
+  .user-card {
+    margin: 20px;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fafafa;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .user-card h1 {
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+  }
+  .user-card h2 {
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  .user-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .user-card li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+  }
+  .user-card li span.label {
+    flex: 0 0 220px;
+    font-weight: bold;
+  }
+  .user-card li span.value {
+    flex: 1;
+  }
+  .user-card .btn-back {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border: 1px solid #0c4b77;
+    border-radius: 4px;
+    color: #0c4b77;
+  }
+  .user-card .btn-back:hover {
+    background: #0c4b77;
+    color: white;
+  }
+</style>
+
+<div class="user-card">
+  <h1>User Details <small>(ID: {{ user.id }})</small></h1>
+  <ul>
+    <li><span class="label">Email:</span><span class="value">{{ user.email }}</span></li>
+    <li><span class="label">Username:</span><span class="value">{{ user.username or 'N/A' }}</span></li>
+    <li><span class="label">Role:</span><span class="value">{{ user.role|capitalize }}</span></li>
+    <li><span class="label">Status:</span><span class="value">{{ user.status|capitalize if user.status else 'N/A' }}</span></li>
+    <li><span class="label">Email Verified:</span><span class="value">{{ 'Yes' if user.is_verified else 'No' }}</span></li>
+    <li><span class="label">Last Login:</span><span class="value">{{ user.last_login.strftime('%Y-%m-%d %H:%M:%S') if user.last_login else 'Never' }}</span></li>
+    <li><span class="label">Registered IP:</span><span class="value">{{ user.registered_ip or 'N/A' }}</span></li>
+    <li><span class="label">Created At:</span><span class="value">{{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span></li>
+  </ul>
+
+  {% if user.role == 'student' and details %}
+  <h2>Student Details</h2>
+  <ul>
+    <li><span class="label">Full Name:</span><span class="value">{{ details.student_name }}</span></li>
+    <li><span class="label">Enrollment Number:</span><span class="value">{{ details.enroll_number }}</span></li>
+    <li><span class="label">Course:</span><span class="value">{{ details.course }}</span></li>
+    <li><span class="label">Year:</span><span class="value">{{ details.year or 'N/A' }}</span></li>
+    <li><span class="label">Date of Birth:</span><span class="value">{{ details.dob }}</span></li>
+    <li><span class="label">Gender:</span><span class="value">{{ details.gender }}</span></li>
+    <li><span class="label">Phone:</span><span class="value">{{ details.phone }}</span></li>
+    <li><span class="label">Address:</span><span class="value">{{ details.address }}</span></li>
+    <li><span class="label">Institution Name:</span><span class="value">{{ details.institution_name if details.institution_name else 'N/A' }}</span></li>
+  </ul>
+
+  {% elif user.role == 'teacher' and details %}
+  <h2>Teacher Details</h2>
+  <ul>
+    <li><span class="label">Full Name:</span><span class="value">{{ details.teacher_name }}</span></li>
+    <li><span class="label">Gender:</span><span class="value">{{ details.gender }}</span></li>
+    <li><span class="label">Phone:</span><span class="value">{{ details.phone }}</span></li>
+    <li><span class="label">Designation:</span><span class="value">{{ details.designation or 'N/A' }}</span></li>
+    <li><span class="label">Subject Expertise 1:</span><span class="value">{{ details.subject_expertise1 }}</span></li>
+    <li><span class="label">Subject Expertise 2:</span><span class="value">{{ details.subject_expertise2 or 'N/A' }}</span></li>
+    <li><span class="label">Years of Experience:</span><span class="value">{{ details.years_experience }}</span></li>
+    <li><span class="label">Highest Qualification:</span><span class="value">{{ details.highest_qualification }}</span></li>
+    <li><span class="label">Affiliated Institution:</span><span class="value">{{ details.institution_name or 'N/A' }}</span></li>
+  </ul>
+
+  {% elif user.role == 'institution' and details %}
+  <h2>Institution Details</h2>
+  <ul>
+    <li><span class="label">Institution Name:</span><span class="value">{{ details.institution_name }}</span></li>
+    <li><span class="label">Admin Name:</span><span class="value">{{ details.admin_name }}</span></li>
+    <li><span class="label">Email:</span><span class="value">{{ details.contact_email or user.email }}</span></li>
+    <li><span class="label">Registration No:</span><span class="value">{{ details.registration_number }}</span></li>
+    <li><span class="label">City:</span><span class="value">{{ details.city }}</span></li>
+    <li><span class="label">State:</span><span class="value">{{ details.state }}</span></li>
+    <li><span class="label">Country:</span><span class="value">{{ details.country or 'N/A' }}</span></li>
+    <li><span class="label">Website:</span><span class="value">{{ details.website or 'N/A' }}</span></li>
+    <li><span class="label">Total Enrolled Users:</span><span class="value">{{ details.total_enrolled or '0' }}</span></li>
+  </ul>
+  {% endif %}
+
+  <a href="{{ url_for('admin.user_management') }}" class="btn-back">← Back to List</a>
+</div>
+{% endblock %}

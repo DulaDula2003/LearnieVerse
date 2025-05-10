@@ -1,0 +1,92 @@
+{% extends "student/base.html" %}
+
+{% block title %}LearnieVerse – Subjects{% endblock %}
+
+{% block right_panel %}{% endblock %}
+
+{% block content %}
+  <div class="institute-info">
+    <h1>Institute Name</h1>
+    <h2>Subjects Dashboard</h2>
+  </div>
+
+  <div class="cards-container">
+    <div class="subjects-cards">
+      <h3 class="section-title">Your Subjects</h3>
+      <div class="row">
+        {% if subjects %}
+          {% for subject in subjects %}
+            <div class="card">
+              <h4>{{ subject.subject }}</h4>
+              <p>Teacher: {{ subject.teacher_name }}</p>
+              <button
+                class="save-btn"
+                data-class-name="{{ subject.class_name }}"
+                data-class-date="{{ subject.class_date }}"
+                data-class-time="{{ subject.class_time }}"
+                data-teacher="{{ subject.teacher_name }}"
+                data-teacher-id="{{ subject.teacher_id }}"
+              >
+                View Details
+              </button>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>You don’t have any subjects assigned yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Details Modal -->
+  <div id="detailsModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3 id="modalClassName"></h3>
+      <p><strong>Date:</strong> <span id="modalClassDate"></span></p>
+      <p><strong>Time:</strong> <span id="modalClassTime"></span></p>
+      <p>
+        <strong>Teacher:</strong> <span id="modalTeacher"></span>
+        &mdash;
+        <a href="#" id="modalChatLink">Chat</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal    = document.getElementById('detailsModal');
+      const closeBtn = modal.querySelector('.close-modal');
+      const btns     = document.querySelectorAll('.save-btn');
+
+      const fld = {
+        name:    document.getElementById('modalClassName'),
+        date:    document.getElementById('modalClassDate'),
+        time:    document.getElementById('modalClassTime'),
+        teacher: document.getElementById('modalTeacher'),
+        chat:    document.getElementById('modalChatLink')
+      };
+
+      btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          fld.name.textContent    = btn.dataset.className;
+          fld.date.textContent    = btn.dataset.classDate;
+          fld.time.textContent    = btn.dataset.classTime;
+          fld.teacher.textContent = btn.dataset.teacher;
+
+          // Build in‑app chat URL
+          const teacherId = btn.dataset.teacherId;
+          fld.chat.href       = '{{ url_for("student.messages") }}?recipient_id=' + teacherId;
+          fld.chat.textContent = 'Chat with ' + btn.dataset.teacher;
+
+          modal.style.display = 'flex';
+        });
+      });
+
+      closeBtn.addEventListener('click', () => modal.style.display = 'none');
+      window.addEventListener('click', e => {
+        if (e.target === modal) modal.style.display = 'none';
+      });
+    });
+  </script>
+{% endblock %}

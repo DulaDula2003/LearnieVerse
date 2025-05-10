@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}LearnieVerse{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Apply FavIcon -->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Logo.png') }}">
+  <!-- Import Quicksand font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
+  <!-- Import CSS File -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/Admin_Dashboard.css') }}">
+  <!-- Global CSS (custom scrollbar, common styles, etc.) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <!-- Flash Messages Popup -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+  <div id="flashMessages">
+    {% for category, message in messages %}
+      <div class="flash-message flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endwith %}
+  <div class="dashboard-container">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Logo" class="logo-img" />
+        <div class="logo-text">LearnieVerse</div>
+      </div>
+      <nav class="menu">
+        <a href="{{ url_for('admin.admin_home') }}" class="menu-item">Dashboard</a>
+        <a href="{{ url_for('admin.user_management') }}" class="menu-item">User Management</a>
+        <a href="{{ url_for('admin.requests') }}" class="menu-item">Requests</a>
+        <a href="{{ url_for('admin.statistics') }}" class="menu-item">Statistics</a>
+        <a href="{{ url_for('admin.settings') }}" class="menu-item">Settings</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      {% block content %}
+      <!-- Page-specific content goes here -->
+      {% endblock %}
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentPath = window.location.pathname;
+      const menuItems = document.querySelectorAll('.menu-item');
+      
+      menuItems.forEach(item => {
+        // Adjust this comparison if your hrefs are relative or absolute
+        if(item.getAttribute('href') === currentPath) {
+          item.classList.add('active');
+        }
+      });
+    });
+    function logout() {
+      window.location.href = "{{ url_for('auth.logout') }}";
+    }
+  </script>
+  <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+</body>
+</html>

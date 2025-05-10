@@ -1,0 +1,89 @@
+{% extends "institute/base.html" %}
+
+{% block title %}LearnieVerse - Announcements{% endblock %}
+
+{% block right_panel %}{% endblock %}
+
+{% block content %}
+  <!-- Institute Title & Subtitle -->
+  <div class="institute-info">
+    <h1>{{ institute.institution_name if institute else "Institute Name" }}</h1>
+    <h2>Announcements</h2>
+  </div>
+  
+  <!-- Announcements Section -->
+  <div class="cards-container">
+    <!-- Announcement Form Section -->
+    <form class="announcement-form" method="POST" action="{{ url_for('institute.announcements') }}">
+      <div class="announcement-form-header">
+        <h3>Make Announcement</h3>
+        <div class="announcement-controls">
+          <select name="audience" id="audience" required>
+            <option value="all">All</option>
+            <option value="teacher">Teacher</option>
+            <option value="student">Student</option>
+          </select>
+          <button class="announcement-buttons" type="submit">Post Announcement</button>
+        </div>
+      </div>
+      <input type="text" name="title" placeholder="Announcement Title" required />
+      <textarea name="content" rows="4" placeholder="Write your announcement here..." required></textarea>
+    </form>    
+    
+    <!-- Dynamic Recent Announcements -->
+<div class="announcement-list-container">
+  <div class="announcement-header">
+    <h3>Recent Announcements</h3>
+    <div class="announcement-filter" onclick="openAllAnnouncements()">View All</div>
+  </div>
+  {% if recent_announcements %}
+    {% for ann in recent_announcements %}
+      <div class="announcement-item">
+        <h4>{{ ann.title }}</h4>
+        <p>{{ ann.content }}</p>
+        <small class="audience-tag">Audience: {{ ann.audience.capitalize() }}</small>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No announcements yet.</p>
+  {% endif %}
+</div>
+
+<!-- Modal for All Announcements -->
+<div id="allAnnouncementsModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeAllAnnouncements()">&times;</span>
+    <h3>All Announcements</h3>
+    <div class="all-announcements-list">
+      {% for ann in all_announcements %}
+        <div class="announcement-item">
+          <h4>{{ ann.title }}</h4>
+          <p>{{ ann.content }}</p>
+          <small class="audience-tag">Audience: {{ ann.audience.capitalize() }}</small>
+          <hr>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <script>
+    function openAllAnnouncements() {
+      document.getElementById("allAnnouncementsModal").style.display = "flex";
+    }
+  
+    function closeAllAnnouncements() {
+      document.getElementById("allAnnouncementsModal").style.display = "none";
+    }
+  
+    window.addEventListener("click", function(event) {
+      const modal = document.getElementById("allAnnouncementsModal");
+      if (event.target === modal) {
+        closeAllAnnouncements();
+      }
+    });
+  </script>
+  
+{% endblock %}

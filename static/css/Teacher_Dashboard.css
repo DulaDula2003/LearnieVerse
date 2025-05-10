@@ -1,0 +1,2239 @@
+/* ---------------------------------------------------------- */
+/* 1) Base & Font Settings                                    */
+/* ---------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background: #CBDEBD;
+    font-size: clamp(14px, 1.5vw, 16px);
+    color: #000;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #10505B;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #10505B;
+  }
+
+/* ---------------------------------------------------------- */
+/* 2) Overall Container Layout                                */
+/* ---------------------------------------------------------- */
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ---------------------------------------------------------- */
+/* 3) Left Sidebar                                            */
+/* ---------------------------------------------------------- */
+.sidebar {
+    flex: 0 0 250px;
+    background: #CBDEBD;
+    padding: 20px;
+    padding-right: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.logo-img {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    object-fit: cover;
+    background: #fff;
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: clamp(22px, 2vw, 24px);
+    line-height: 30px;
+    color: #000;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item {
+    font-size: clamp(16px, 2vw, 18px);
+    text-decoration: none;
+    color: #000;
+    margin: 8px 0;
+    padding: 6px 10px;
+    border-radius: 8px 0 0 8px;
+    transition: background 0.2s;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.menu-item.active {
+    background: #fff;
+    font-weight: 600;
+    border: 1px solid #fff;
+}
+
+/* ---------------------------------------------------------- */
+/* 4) Main Content                                            */
+/* ---------------------------------------------------------- */
+.main-content {
+    flex: 1;
+    background: #fff;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Institute Info */
+.institute-info h1 {
+  font-size: 32px;
+  color: #333;
+}
+
+.institute-info h2 {
+    font-size: 24px;
+    font-weight: 500;
+    color: #666;    
+    margin-bottom: 10px;
+}
+
+/* Optional Profile Pic in the header (if used) */
+.profile-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 10px;
+}
+
+/* Cards Container: the big box around all dashboard cards */
+.cards-container {
+    flex: 1;
+    display: flex;
+    /* border: 2px solid #000; */
+    border-radius: 10px;
+    padding: 20px;
+    background: #f5f5f5;
+    margin-top: 10px; /* Some spacing from the institute-info area */
+    gap: 10px;
+    flex-direction: column;
+}
+
+/* Section Title (above the rows) */
+.section-title {
+    font-size: clamp(18px, 2.5vw, 20px);
+    font-weight: 600;
+}
+
+/* Row Layouts for cards */
+.row {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    /* margin-bottom: 20px; */
+    flex-direction: row;
+}
+
+/* Each Card */
+.card {
+    flex: 1;
+    display: flex;
+    /* height: 23vh; */
+    flex-direction: column; /* So headings are at the top, content below */
+    align-items: flex-start; /* left-align content inside */
+    background: #fff;
+    border: 1px solid #10505B;
+    border-radius: 5px;
+    font-size: clamp(16px, 2vw, 18px);
+    font-weight: 500;
+    text-align: left;
+    padding: 10px; /* give some internal spacing */
+    overflow-y: scroll;
+}
+
+.card::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* For card headings */
+.card h4 {
+    margin-bottom: 10px;
+    font-size: clamp(18px, 2.5vw, 20px);
+    font-weight: 600;
+}
+
+/* Quick links inside a card */
+.links {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+.links a {
+    background: #CBDEBD;
+    color: #fff;
+    padding: 11px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    border: 1px solid white;
+    font-size: clamp(14px, 2vw, 16px);
+    /* height: max-content; */
+}
+
+.links a:hover{
+    background-color: #fff;
+    color: #CBDEBD;
+    border-color: #CBDEBD;
+}
+
+
+/* Upcoming Classes Styling */
+.upcoming-classes ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subject {
+    font-weight: 600;
+    color: #007BFF;
+}
+
+.time {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Messages Styling */
+.messages ul li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.messages ul li i {
+    color: #28a745;
+}
+
+
+.card ul {
+    list-style: none; /* Remove bullet points */
+    padding-left: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .card ul li {
+    font-size: medium;
+    padding: 10px 0; /* Vertical spacing for each item */
+    border-bottom: 1px solid #ccc; /* A light line as a separator */
+  }
+  
+  .card ul li:last-child {
+    border-bottom: none; /* Remove line from the last item */
+  }
+
+/* ---------------------------------------------------------- */
+/* 5) Right Panel                                             */
+/* ---------------------------------------------------------- */
+.right-panel {
+    flex: 0 0 280px;
+    background: #fff;
+    padding: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+}
+
+.right-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #CBDEBD;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    z-index: -1;
+}
+
+.right-panel-header {
+    margin-bottom: 5px;
+}
+
+.admin-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-direction: row-reverse;
+}
+
+.admin-avatar {
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.admin-name {
+    font-size: clamp(12px, 2vw, 14px);
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.date-label {
+    font-size: clamp(18px, 2.5vw, 20px);
+    font-weight: 700;
+}
+
+/* Calendar Section */
+.calendar {
+    margin-bottom: 20px;
+    background: #fff;
+    border: 1px solid #10505B;
+    border-radius: 8px;
+    width: 100%;
+    height: 30%;
+    box-sizing: border-box;
+    overflow-x: auto;
+}
+
+.calendar table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.calendar th,
+.calendar td {
+    padding: 4px;
+    font-size: clamp(12px, 2vw, 14px);
+    vertical-align: middle;
+}
+
+.calendar th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+}
+
+/* Month Navigation */
+.month-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.arrow-btn {
+    font-size: clamp(14px, 2vw, 16px);
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    padding: 4px 6px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.arrow-btn:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* ---------------------------------------------------------- */
+/* 6) Online Users                                            */
+/* ---------------------------------------------------------- */
+.online-users {
+    position: relative;
+}
+
+.online-users h3 {
+    font-size: clamp(18px, 2.5vw, 20px);
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.see-all {
+    position: absolute;
+    right: 0;
+    top: 4px;
+    font-size: clamp(12px, 2vw, 14px);
+    font-weight: 300;
+    color: #000;
+    text-decoration: none;
+}
+
+.user-entry {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border: 1px solid #10505B;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    margin-right: auto;
+}
+
+.user-name {
+    font-size: clamp(12px, 2vw, 14px);
+    font-weight: 500;
+}
+
+.user-id {
+    font-size: clamp(12px, 2vw, 14px);
+    font-weight: 300;
+}
+
+/* Status Dot */
+.user-status {
+    width: 8px;
+    height: 8px;
+    background: #10505B;
+    border-radius: 50%;
+}
+
+/* Manage Classes */
+/* Manage Classes Specific Styles */
+.card ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .card ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .card ul li:last-child {
+    border-bottom: none;
+  }
+  
+  .class-name {
+    font-weight: 600;
+    width: 20%;
+  }
+  
+  .class-time {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .class-actions {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .class-actions a.btn {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+  
+ /* Add New Class Page – Unique Styles */
+ .anc-main-content {
+  padding: 20px;
+}
+
+.anc-form-container {
+  background: #fff;
+  border: 2px solid #10505B;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.anc-form-container h2 {
+  text-align: center;
+  color: #10505B;
+  margin-bottom: 20px;
+}
+
+.anc-form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.anc-form-group label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.anc-form-group input[type="text"],
+.anc-form-group input[type="time"],
+.anc-form-group input[type="date"],
+.anc-form-group input[type="time"],
+.anc-form-group input[type="url"],
+.anc-form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #10505B;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.anc-form-group textarea {
+  resize: vertical;
+}
+
+/* New styles for the student list in Add New Class page */
+.anc-students-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 5px;
+  border: 1px solid #10505B;
+  border-radius: 5px;
+  max-height: 200px;
+  /* adjust as needed */
+  overflow-y: auto;
+}
+
+.anc-student-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.anc-student-dp {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #10505B;
+}
+
+.anc-student-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.anc-student-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.anc-student-id {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.anc-student-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+.anc-radio-group {
+  display: flex;
+  gap: 20px;
+  margin-top: 5px;
+}
+
+.anc-submit-btn {
+  width: 100%;
+  padding: 10px;
+  background: #10505B;
+  color: #fff;
+  border: 1px solid;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+input[type="checkbox" i] {
+  all: unset;
+  width: 15px;
+  height: 15px;
+  border: 1px solid gray;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 2px;
+  /* optional for slight rounding */
+}
+
+input[type="checkbox" i]:checked {
+  background-color: #083a42;
+}
+input[type="radio" i] {
+  all: unset;
+  width: 15px;
+  height: 15px;
+  border: 1px solid gray;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 50%;
+}
+input[type="radio" i]:checked {
+  background-color: #083a42;
+}
+
+
+  /* Form Styles for Test Creation */
+#createTestForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  #createTestForm label {
+    font-weight: 500;
+  }
+  #createTestForm input[type="text"],
+  #createTestForm input[type="number"],
+  #createTestForm input[type="time"],
+  #createTestForm input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #10505B;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin: 5px;
+  }
+  #createTestForm button {
+    align-self: flex-start;
+  }
+  
+  /* Test List Panel – list style for tests */
+  .card ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .card ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  .card ul li:last-child {
+    border-bottom: none;
+  }
+  .test-title {
+    font-weight: 600;
+    width: 20%;
+  }
+  .test-date {
+    font-size: 0.9rem;
+    color: #555;
+  }
+   
+  /* Search Button */
+  .btn {
+    padding: 8px 12px;
+    border: 1px solid #10505B;
+    background: #10505B;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+  
+  .btn:hover {
+    background: #fff;
+    color: #10505B;
+  }
+
+  .assignment-title{
+    width: 20%;
+  }
+
+  .t-card{
+    flex: 1;
+    display: flex;
+    flex-direction: column; /* So headings are at the top, content below */
+    align-items: flex-start; /* left-align content inside */
+    background: #fff;
+    border: 1px solid #10505B;
+    border-radius: 5px;
+    font-size: clamp(16px, 2vw, 18px);
+    font-weight: 500;
+    text-align: left;
+    padding: 10px; /* give some internal spacing */
+  }
+
+  .t-card h4{
+    margin-bottom: 10px;
+    font-size: clamp(18px, 2.5vw, 20px);
+    font-weight: 600;
+  }
+
+  /* Past Tests List Styles */
+.past-tests-row .card h4 {
+  margin-bottom: 10px;
+  font-size: clamp(18px, 2.5vw, 20px);
+  font-weight: 600;
+}
+
+.past-tests-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.past-tests-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.past-tests-list li:last-child {
+  border-bottom: none;
+}
+
+.test-title {
+  flex: 0.9;
+  font-weight: 600;
+}
+
+.test-status {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+/* Unique status colors */
+.test-status.not-taken {
+  color: orange;
+}
+.test-status.completed {
+  color: green;
+}
+.test-status.in-progress {
+  color: blue;
+}
+
+/* Adjust button styles if needed */
+.past-tests-list .btn {
+  padding: 6px 10px;
+  font-size: clamp(14px, 2vw, 16px);
+}
+
+
+/* Styles specific for the MCQ Test Creation page */
+.mcq-container {
+  background: #fff;
+  padding: 20px;
+  border: 2px solid #10505B;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-top: 20px;
+}
+.mcq-container h3 {
+  text-align: center;
+  color: #10505B;
+  margin-bottom: 20px;
+}
+.question-item {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 15px;
+}
+.question-item:last-child {
+  border-bottom: none;
+}
+.question-item label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+}
+.question-item input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #10505B;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.option input[type="text"] {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #10505B;
+  border-radius: 5px;
+}
+.add-question-btn,
+.submit-test-btn {
+  display: inline-block;
+  padding: 10px 16px;
+  background: #10505B;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+  margin-top: 10px;
+}
+.add-question-btn:hover,
+.submit-test-btn:hover {
+  background: #083a42;
+}
+.t-divider{
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+  /* Table styling for student submissions (added "Result" column) */
+  .students-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .students-table th, .students-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  .students-table th {
+    background: #f0f0f0;
+    font-weight: 600;
+  }
+  /* Grading Details Section */
+  .grading-details {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    display: none;
+  }
+  .grading-details h3 {
+    margin-bottom: 10px;
+  }
+  .grading-details .details p {
+    margin: 5px 0;
+  }
+  .grading-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+  }
+  .grading-actions .btn {
+    padding: 8px 12px;
+    border: none;
+    background: #10505B;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 0.9rem;
+  }
+  .grading-actions .btn:hover {
+    background: #083a42;
+  }
+  /* Result text colors */
+  .result-passed {
+    color: green;
+    font-weight: bold;
+  }
+  .result-failed {
+    color: red;
+    font-weight: bold;
+  }
+
+
+  /* --------------------------------------------- */
+/* ========================================================== */
+/* Report Page Specific Styles (Scoped by unique classes)     */
+/* ========================================================== */
+
+/* ------------------- Report Card -------------------------- */
+.make-report-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #10505B;
+    border-radius: 5px;
+    /* Remove the scrollbar by hiding overflow-y */
+    overflow: hidden;
+}
+
+/* Title for the report card section */
+.make-report-card h4 {
+    margin-bottom: 10px;
+    font-size: clamp(18px, 2.5vw, 20px);
+    font-weight: 600;
+}
+
+/* ------------------- Report List -------------------------- */
+.report-list {
+    list-style: none; /* Remove bullet points */
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/* Each report item as a list item */
+.report-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0; /* Spacing between items */
+    border-bottom: 1px solid #ccc; /* Separator line */
+}
+
+/* Remove the border from the last item */
+.report-list li:last-child {
+    border-bottom: none;
+}
+
+/* ------------------- Report Page Container -------------------------- */
+.report-container {
+    width: 100%;
+    padding: 20px;
+    background: #fff;
+    border: 2px solid #10505B;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rp-row{
+    height: auto;
+    flex-direction: column;
+}
+
+/* ------------------- Form & Table Styles -------------------------- */
+.report-container .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.report-container .form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.report-container .form-group input,
+.report-container .form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #10505B;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#subjectTable input, #subjectTable textarea
+{
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #10505B;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.report-container .form-group textarea {
+    resize: none;
+}
+
+.report-container table#subjectTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.report-container table#subjectTable th,
+.report-container table#subjectTable td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.report-container table#subjectTable th {
+    background: #10505b;
+}
+
+.report-container .percentage {
+    font-weight: bold;
+    color: #10505B;
+}
+
+
+/* --------------------------------------------------------- */
+/* Messages page */
+/* Fresh CSS for Messages Dashboard Main Content */
+.messages-dashboard {
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  background: #fff;
+  padding: 10px;
+}
+
+.messages-dashboard .institute-info h1 {
+  font-size: 2.5rem;
+  color: #333;
+}
+
+.messages-dashboard .institute-info h2 {
+  font-size: 1.8rem;
+  color: #666;
+}
+
+.messages-dashboard .messages-cards {
+  background: #f5f5f5;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.messages-dashboard .messages-cards .section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #444;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.messages-dashboard .message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.messages-dashboard .message-list .card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.messages-dashboard .message-list .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.messages-dashboard .message-list .card h4 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #000000;
+}
+
+.messages-dashboard .message-list .card p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.messages-dashboard .message-list .card a {
+  display: inline-block;
+  text-decoration: none;
+  background: #10505B;
+  color: #fff;
+  border: 1px solid #10505B;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.messages-dashboard .message-list .card a:hover {
+  background-color: #fff;
+  color: #10505B;
+  border-color: #10505B;
+}
+
+/* Container that holds both search and sort */
+.search-sort-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Search Bar Container */
+.search-container {
+  width: 75%;
+  display: flex;
+  align-items: center;
+}
+
+/* Search Input */
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 5px 0 0 5px;
+  font-size: 1rem;
+  width: 100%; /* Adjust as needed */
+}
+
+/* Search Button */
+.search-btn {
+  padding: 8px 12px;
+  border: 1px solid #10505B;
+  background: #10505B;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.search-btn:hover {
+  background: #fff;
+  color: #10505B;
+}
+
+/* ---- Sort & Toggle View Container ---- */
+.sort-container {display: flex;align-items: center;gap: 10px;width: 25%;justify-content: space-evenly;}
+
+/* Sort Dropdown */
+.sort-dropdown {
+width: 50%;
+background: #10505B;
+color: #fff;
+border: 1px solid #10505B;
+padding: 8px 12px;
+border-radius: 5px;
+font-size: clamp(14px, 2vw, 16px);
+cursor: pointer;
+outline: none;
+transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sort-dropdown:hover {
+background: #fff;
+color: #10505B;
+}
+
+/* New Toggle Button */
+.view-toggle-btn {
+width: 40%;
+padding: 8px 12px;
+font-size: clamp(14px, 2vw, 16px);
+background: #10505B;
+color: #fff;
+border: 1px solid #10505B;
+border-radius: 5px;
+cursor: pointer;
+transition: background 0.3s ease, color 0.3s ease;
+}
+.view-toggle-btn:hover {
+background: #fff;
+color: #10505B;
+}
+
+/* ---- Table View Styles for the Message List ---- */
+.message-list {
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+
+/* When table-view class is added, switch layout */
+.message-list.table-view {
+display: table;
+width: 100%;
+border-collapse: collapse;
+}
+.message-list.table-view .card {
+display: table-row;
+border: 1px solid #ddd;
+/* Remove extra padding to mimic a table row */
+padding: 0;
+}
+
+/* Style each element inside the card as a table cell */
+.message-list.table-view .card > * {
+display: table-cell;
+padding: 10px;
+vertical-align: middle;
+border-bottom: 1px solid #ddd;
+/* width: 9%; */
+}
+
+/* Optional: Remove bottom border on last row cells */
+.message-list.table-view .card:last-child > * {
+border-bottom: none;
+}
+
+.message-list.table-view .card .read-more-btn {
+display: table-cell !important;
+text-align: center !important;
+vertical-align: middle !important;
+width: 10% !important;
+border-radius: 0px;
+}
+
+.message-list.table-view .message-author{
+width: 20%;
+}
+
+
+/* Container for the small profile and heading */
+.message-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;  /* Space between avatar and text */
+  margin-bottom: 10px;
+}
+
+/* Small profile avatar in messages */
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ----------------------- */
+/* Settings Dashboard Styles */
+/* ----------------------- */
+
+.settings-dashboard .institute-info h1 {
+  font-size: 2.5rem;
+  color: #333;
+}
+
+.settings-dashboard .institute-info h2 {
+  font-size: 1.8rem;
+  color: #666;
+}
+
+/* Settings Container */
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* border: 2px solid #000; */
+  border-radius: 10px;
+  padding: 20px;
+  background: #f5f5f5;
+  margin-top: 10px;
+}
+
+/* Each Setting Panel */
+.setting-panel {
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 15px;
+  background: #fff;
+}
+
+/* Panel Headings */
+.setting-panel h3 {
+  margin-bottom: 15px;
+  font-size: clamp(18px, 2.5vw, 20px);
+  font-weight: 600;
+}
+
+/* Profile Details */
+.profile-details label,
+.password-details label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.profile-details input,
+.password-details input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* New Profile DP Section */
+.profile-dp {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.profile-picture {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #000;
+}
+
+.change-dp-btn {
+  padding: 8px 12px;
+  background: #10505B;
+  color: #fff;
+  border: 1px solid #10505B;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.3s ease;
+}
+
+.change-dp-btn:hover {
+  background: #fff;
+  color: #10505B;
+}
+
+/* Notification Preferences */
+.notification-options .option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.notification-options label {
+  font-weight: 500;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-toggle label {
+  font-weight: 500;
+}
+
+/* Save/Update Button */
+.save-btn {
+  background: #10505B;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: 1px solid #10505B;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.3s ease;
+}
+
+.save-btn:hover {
+  background: #fff;
+  color: #10505B;
+}
+
+/* Feedback & Complaints Panel - Additional Styles */
+.setting-panel.feedback-complaints form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.setting-panel.feedback-complaints label {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.setting-panel.feedback-complaints select,
+.setting-panel.feedback-complaints input[type="text"],
+.setting-panel.feedback-complaints textarea {
+  all: unset;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.setting-panel.feedback-complaints textarea {
+  height: 220px;
+  word-wrap: break-word;
+}
+
+/* Anonymous Option */
+.anonymous-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+/* Complaint Actions: Submit button and status link */
+.complaint-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.status-link {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: #10505B;
+  border: 1px solid #10505B;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.status-link:hover {
+  background: #10505B;
+  color: #fff;
+}
+
+input[type="checkbox" i] {
+  all: unset;
+  width: 15px;
+  height: 15px;
+  border: 1px solid gray;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 2px; /* optional for slight rounding */
+}
+
+input[type="checkbox" i]:checked {
+  background-color: #10505B;
+}
+
+input[type="password"] {
+  width: 100%;              /* Makes the input field stretch to full container width */
+  padding: 8px;             /* Adds some inner spacing for better UX */
+  margin-bottom: 15px;      /* Gives space below the input for separation */
+  border: 1px solid #ccc;   /* Light grey border for a clean look */
+  border-radius: 5px;       /* Rounded corners for a smooth aesthetic */
+}
+
+
+.logout-section {text-align: right;/* margin-top: 20px; */}
+
+.logout-btn {margin-top: 0.5rem;background: #FF6B6B;color: white;border: none;padding: 10px 15px;border-radius: 5px;cursor: pointer;font-size: 16px;width: 20%;transition: background 0.3s;}
+
+.logout-btn:hover {
+background: #E63946;
+}
+
+.logout-btn:hover {
+  background: #E63946;
+}
+  
+
+/* Students Tab */
+/* Custom styles for Teacher Students Section */
+.students-container {
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 10px;
+  flex: 1;
+  overflow: auto;
+}
+
+.students-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.students-header h3 {
+  font-size: 24px;
+  color: #10505B;
+  flex: 1;
+}
+
+.students-header .search-container1 {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.students-header input[type="text"] ,.msg input[type="text"]{
+  padding: 8px;
+  border: 1px solid #10505B;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.students-header button {
+  padding: 8px 12px;
+  background: #10505B;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 16px;
+}
+
+.students-header button:hover {
+  background: #083a42;
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.students-table th,
+.students-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-size: 16px;
+}
+
+.students-table th {
+  background: #10505B;
+  color: #fff;
+}
+
+.btn {
+  padding: 8px 12px;
+  border: 1px solid #10505B;
+  background: #10505B;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.btn:hover {
+  background: #fff;
+  color: #10505B;
+}
+
+/* Floating Invite Button */
+.float-invite-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: #10505b;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 36px;
+  line-height: 60px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s;
+  z-index: 1000;
+}
+
+.float-invite-btn:hover {
+  background: #0e444c;
+}
+
+/* Modal styles for inviting students */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border: 2px solid #10505B;
+  border-radius: 10px;
+  width: 90%;
+  text-align: center;
+  max-width: 500px;
+}
+
+.modal-content h3 {
+  margin-bottom: 15px;
+  color: #10505B;
+}
+
+.modal-content label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.modal-content input[type="email"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #10505B;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.modal-content button {
+  padding: 8px 12px;
+  background: #10505B;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.modal-content button:hover {
+  background: #083a42;
+}
+
+.close-modal {
+  float: right;
+  cursor: pointer;
+  color: #10505B;
+  font-size: 28px;
+  font-weight: bold;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+  color: #000;
+}
+
+/* Attendace Tab */
+/* Attendance Page Specific Styles (prefixed with att-) */
+.att-main-content {
+  padding: 20px;
+}
+.att-header {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #10505B;
+}
+
+/* Date Picker Section */
+.att-date-picker {
+  text-align: right;
+}
+.att-date-picker input[type="date"] {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #10505B;
+  border-radius: 5px;
+}
+
+/* Class Section Container */
+.att-class-section {
+  margin-bottom: 30px;
+  border: 2px solid #10505B;
+  border-radius: 10px;
+  padding: 15px;
+  background: #fff;
+}
+
+/* New container to hold heading and bulk actions inline */
+.att-class-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.att-class-header h3 {
+  margin: 0;
+  color: #10505B;
+  font-size: 1.8rem;
+}
+
+/* Bulk Actions inside each class section */
+.att-bulk-actions {
+  display: flex;
+  gap: 10px;
+}
+.att-bulk-actions .btn {
+  padding: 8px 12px;
+  background: #10505B;
+  color: #fff;
+  border: 1px solid #10505B;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-decoration: none;
+  font-size: 16px;
+}
+.att-bulk-actions .btn:hover {
+  border-color: #083a42;
+  color: #083a42;
+  background-color: #fff;
+}
+
+/* Attendance Table */
+.att-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.att-table th, .att-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+.att-table th {
+  background: #CBDEBD;
+  font-weight: 600;
+}
+
+/* Radio button styles for attendance */
+.att-option input[type="radio"] {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+/* Attendance Summary */
+.att-summary {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #10505B;
+  text-align: center;
+}
+
+.announcement-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #10505B;
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.announcement-btn:hover {
+  background: #083a42;
+}
+/* Ensure the new button is spaced nicely with existing sort controls */
+.sort-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Teacher Reports Page – Unique Styles */
+.reports-teacher-main {
+  padding: 20px;
+}
+.reports-header {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #10505B;
+}
+.reports-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+}
+.report-panel {
+  background: #fff;
+  border: 2px solid #10505B;
+  border-radius: 10px;
+  padding: 15px;
+}
+.report-panel h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #10505B;
+}
+.report-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.report-panel table th,
+.report-panel table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+.report-panel table th {
+  background: #CBDEBD;
+  font-weight: 600;
+}
+.chart-placeholder {
+  background: #eaeaea;
+  border-radius: 5px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  margin-top: 10px;
+}
+.rep-student-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  background: #fff;
+  border: 2px solid #10505B;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+.rep-student-search h3 {
+  text-align: center;
+  color: #10505B;
+  margin-bottom: 15px;
+}
+.rep-search-container {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.rep-search-container input[type="text"] {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #10505B;
+  border-radius: 5px;
+  font-size: 16px;
+}
+.rep-student-info p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #333;
+}
+/* Make the Teacher Comments panel take full width */
+.report-panel.teacher-comments {
+  grid-column: 1 / -1;
+}
+
+.students-table select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.3s ease;
+  outline: none;
+  width: 100%;
+  max-width: 180px;
+}
+
+.students-table select:focus {
+  border-color: #10505B;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgb(8, 80, 95);
+}
+
+.students-table option {  
+  background-color: #fff;
+  color: #333;
+}
+
+.btn1 {
+  background: #E63946 !important;
+  border-radius: 5px !important;
+  border-color: #E63946 !important;
+}
+
+.btn1:hover {
+  background: #fff !important;
+  color: #E63946 !important;
+}
+
+.details-card{
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.done-btn {
+  background-color: #28a745;  /* Green for "Done" */
+  color: white;
+  cursor: not-allowed;
+}
+.done-btn:hover {
+  background-color: #218838;  /* Darker green on hover */
+}
+
+/* ————————————————————————————————————————————————— */
+/* Right Panel / Contacts Sidebar                         */
+/* ————————————————————————————————————————————————— */
+
+.contacts-list {
+  list-style: none;
+}
+
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.contact-item:hover {
+  background: #f0f0f0;
+}
+
+.contact-item strong {
+  font-weight: 600;
+}
+
+.new-msg-indicator {
+  background-color: #e63946;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 20px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* ————————————————————————————————————————————————— */
+/* Chat Window                                             */
+/* ————————————————————————————————————————————————— */
+.messages-dashboard {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 25px 0 0 25px;
+  height: 100%;
+  padding: 1rem;
+}
+
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.chat-header {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+.chat-header h4 {
+  font-size: 1rem;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  background: #f9f9f9;
+  overflow-y: auto;
+}
+.chat-message {
+  margin-bottom: 10px;
+  padding: 8px;
+  background: #f1f1f1;
+  border-radius: 8px;
+  word-wrap: break-word;
+}
+.chat-message.my-message {
+  background: #cbdebd;
+  color: #fff;
+  text-align: right;
+}
+
+/* ————————————————————————————————————————————————— */
+/* Message Input                                           */
+/* ————————————————————————————————————————————————— */
+.chat-input {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+.chat-input input[type="text"] {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.chat-input button {
+  padding: 8px 16px;
+  background: #10505B;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.chat-input button:hover {
+  background: #083a42;
+}
+/* ─── Dark Mode Overrides for Settings Panels ───────────────────────────────── */
+
+/* Dark‐mode the settings container itself */
+body.dark-mode .settings-container,
+body.dark-mode .menu-item.active {
+  background: #1b1b1b !important;
+  color: #e0e0e0 !important;
+  border-color: #373737 !important;
+}
+
+body.dark-mode .menu-item.active{
+  border-color: #1b1b1b !important;
+}
+
+/* Dark‐mode each individual panel */
+body.dark-mode .setting-panel {
+  background: #252525 !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #444 !important;
+}
+
+/* Make sure form controls inside also stay visible */
+body.dark-mode .setting-panel input,
+body.dark-mode .setting-panel textarea,
+body.dark-mode .setting-panel select {
+  background: #2a2a2a !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #373737 !important;
+}
+
+/* Headings inside panels */
+body.dark-mode .setting-panel h3,
+body.dark-mode .setting-panel label {
+  color: #e0e0e0 !important;
+}
+/* ─── Catch-all for white & off-white panels ───────────────────────────────── */
+body.dark-mode .main-content,
+body.dark-mode ::-webkit-scrollbar-track,
+body.dark-mode .cards-container,
+body.dark-mode .messages-cards,
+body.dark-mode .subjects-cards,
+body.dark-mode .classes-cards,
+body.dark-mode .report-container,
+body.dark-mode .make-report-card,
+body.dark-mode .settings-container,
+body.dark-mode .modal-content,
+body.dark-mode .anc-form-container,
+body.dark-mode .students-container,
+body.dark-mode .att-class-section,
+body.dark-mode .calendar,
+body.dark-mode .report-panel,
+body.dark-mode .chat-window,
+body.dark-mode .chat-messages,
+body.dark-mode .messages-dashboard  {
+  background: #1e1e1e !important;  /* darker grey */
+}
+
+/* ─── Any tables or list-panels still using #f9f9f9 ──────────────────────── */
+body.dark-mode .students-table th,
+body.dark-mode .students-table td,
+body.dark-mode .att-table th,
+body.dark-mode .att-table td,
+body.dark-mode .reports-container,
+body.dark-mode .report-panel table th,
+body.dark-mode .report-panel table td{
+  background: #2a2a2a !important;
+}
+
+/* ─── Inputs & form controls that default to #fff or #f9f9f9 ───────────── */
+body.dark-mode input,
+body.dark-mode .right-panel,
+body.dark-mode textarea,
+body.dark-mode select {
+  background: #2a2a2a !important;
+  color: #e0e0e0 !important;
+  border-color: #373737 !important;
+}
+
+/* ─── Override any leftover cards / list items ─────────────────────────── */
+body.dark-mode .card,
+body.dark-mode .t-card,
+body.dark-mode .card ul li,
+body.dark-mode .past-tests-list li,
+body.dark-mode .rep-student-search,
+body.dark-mode .class-info-table {
+  background: #252525 !important;
+  border-color:  #444     !important;
+}
+/* ─── Dark-Mode Overrides for all remaining light backgrounds ───────────────── */
+body.dark-mode {
+  /* catch any white/off-white containers */
+  --dm-panel-bg:   #1e1e1e !important;
+  --dm-subtle-bg:  #2a2a2a !important;
+  --dm-border-col: #373737 !important;
+}
+
+body.dark-mode .main-content,
+body.dark-mode .cards-container,
+body.dark-mode .settings-container,
+body.dark-mode .students-container,
+body.dark-mode .messages-cards,
+body.dark-mode .subjects-cards,
+body.dark-mode .classes-cards,
+body.dark-mode .report-container,
+body.dark-mode .make-report-card,
+body.dark-mode .anc-form-container,
+body.dark-mode .modal-content,
+body.dark-mode .att-class-section,
+body.dark-mode .calendar,
+body.dark-mode .chat-window,
+body.dark-mode .chat-messages {
+  background: var(--dm-panel-bg);
+}
+
+body.dark-mode .students-table th,
+body.dark-mode .students-table td,
+body.dark-mode .att-table th,
+body.dark-mode .att-table td,
+body.dark-mode .report-panel table th,
+body.dark-mode .report-panel table td {
+  background: var(--dm-subtle-bg);
+}
+
+body.dark-mode .calendar th,
+body.dark-mode .calendar td {
+  background: var(--dm-subtle-bg);
+}
+
+body.dark-mode .chart-placeholder,
+body.dark-mode .past-tests-list li,
+body.dark-mode .message-list .card,
+body.dark-mode .grading-details,
+body.dark-mode .rep-student-search {
+  background: var(--dm-subtle-bg);
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select,
+body.dark-mode .search-input,
+body.dark-mode .sort-dropdown,
+body.dark-mode .view-toggle-btn {
+  background: var(--dm-subtle-bg);
+  border-color: var(--dm-border-col);
+}
+
+body.dark-mode .class-actions a.btn,
+body.dark-mode .btn,
+body.dark-mode .save-btn,
+body.dark-mode .logout-btn,
+body.dark-mode .announcement-btn {
+  background: var(--dm-subtle-bg);
+  border-color: var(--dm-border-col);
+}
+/* ─── Dark Mode: light-text overrides ───────────────────────── */
+body.dark-mode,
+body.dark-mode .sidebar,
+body.dark-mode .main-content,
+body.dark-mode .cards-container,
+body.dark-mode .settings-container,
+body.dark-mode .students-container,
+body.dark-mode .messages-cards,
+body.dark-mode .subjects-cards,
+body.dark-mode .classes-cards,
+body.dark-mode .report-container,
+body.dark-mode .make-report-card,
+body.dark-mode .anc-form-container,
+body.dark-mode .modal-content,
+body.dark-mode .att-class-section,
+body.dark-mode .calendar,
+body.dark-mode .chat-window,
+body.dark-mode .chat-messages,
+body.dark-mode .card,
+body.dark-mode .t-card {
+  /* switch all default text from black to a softer light gray */
+  color: #dddddd !important;
+}
+
+/* Headings */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+  color: #eeeeee !important;
+}
+
+/* Inputs / placeholders */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select,
+body.dark-mode ::placeholder {
+  color: #cccccc !important;
+}
+
+/* Links */
+body.dark-mode a {
+  color: #bbbbbb !important;
+}
+body.dark-mode a:hover {
+  color: #ffffff !important;
+}
+
+body.dark-mode .sidebar,
+body.dark-mode .dashboard-container,
+body.dark-mode .right-panel::before{
+  background-color: #515d48;
+}
+
+/* Institute_Dashboard.css */
+.calendar td.today {
+  background-color: #3737375e;
+  border-radius: 10%;
+  color: #000;
+  font-weight: bold;
+}

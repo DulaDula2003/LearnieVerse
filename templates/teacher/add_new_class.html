@@ -1,0 +1,84 @@
+{% extends "teacher/base.html" %}
+
+{% block title %}LearnieVerse - Add New Class{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ institute_name }}</h1>
+  <h2 id="assignmentTitle">New Class</h2>
+</div>
+
+<div class="anc-form-container">
+  <h2>Add New Class</h2>
+  <form id="addClassForm" method="POST">
+    <div class="anc-form-group">
+      <label for="class-name">Class Name:</label>
+      <input type="text" id="class-name" name="class-name" placeholder="Enter class name" required>
+    </div>
+    <div class="anc-form-group">
+      <label for="class-time">Class Time:</label>
+      <input type="time" id="class-time" name="class-time" required>
+    </div>
+    <div class="anc-form-group">
+      <label for="class-date">Class Date:</label>
+      <input type="date" id="class-date" name="class-date" required>
+    </div>
+    <div class="anc-form-group">
+      <label>Select Students:</label>
+      <div class="anc-students-list">
+        <!-- Option for Everyone -->
+        <div class="anc-student-item">
+          <input type="checkbox" id="student_all" name="students" value="everyone">
+          <label for="student_all"><strong>Everyone</strong> <p>(Temproray Class)</p></label>
+        </div>
+        {% for student in students %}
+        <div class="anc-student-item">
+          <input type="checkbox" id="student{{ loop.index }}" name="students" value="{{ student.id }}">
+          <img
+            src="{{ url_for('static', filename='uploads/' ~ (student.profile_pic if student.profile_pic else 'User.jpg')) }}"
+            alt="{{ student.student_name }}" class="anc-student-dp">
+          <div class="anc-student-info">
+            <span class="anc-student-name">{{ student.student_name }}</span>
+            <span class="anc-student-id">ID: {{ student.id }}</span>
+          </div>
+        </div>
+        {% endfor %}
+        {% if not students %}
+        <p style="color: gray; font-style: italic;">No students assigned to your profile yet.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="anc-form-group">
+      <label>Class Visibility:</label>
+      <div class="anc-radio-group">
+        <label><input type="radio" name="visibility" value="public" checked> Public (Shareable Link)</label>
+        <label><input type="radio" name="visibility" value="private"> Private (Not Shareable)</label>
+      </div>
+    </div>
+    <div class="anc-form-group">
+      <label for="join-link">Join Link:</label>
+      <input type="url" id="join-link" name="join-link" placeholder="Enter join link (or auto‑generate)">
+    </div>
+    <button type="submit" class="btn anc-submit-btn">Create Class</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block right_panel %}{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/Add_New_Class.js') }}" defer></script>
+<script>
+  // Get the "Everyone" checkbox
+  const everyoneCheckbox = document.getElementById('student_all');
+  // Get all other student checkboxes
+  const individualCheckboxes = document.querySelectorAll('.anc-students-list input[type="checkbox"]:not(#student_all)');
+
+  everyoneCheckbox.addEventListener('change', function () {
+    individualCheckboxes.forEach(checkbox => {
+      checkbox.checked = everyoneCheckbox.checked;
+    });
+  });
+</script>
+{% endblock %}

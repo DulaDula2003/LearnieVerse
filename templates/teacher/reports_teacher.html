@@ -1,0 +1,178 @@
+{% extends "teacher/base.html" %}
+
+{% block title %}LearnieVerse - Reports{% endblock %}
+
+{% block content %}
+<div class="reports-teacher-main">
+  <div class="institute-info">
+    <h1>{{ session.institute_name }}</h1>
+    <h2>Teacher Reports</h2>
+  </div>
+  
+  <!-- Student Search & Download Section -->
+  <div class="rep-student-search">
+    <h3>Search Student &amp; Download Info</h3>
+    <div class="rep-search-container">
+      <input type="text" id="studentSearchInput" placeholder="Enter student name or ID" />
+      <button id="studentSearchBtn" class="btn">Search</button>
+    </div>
+    <div id="studentInfo" class="rep-student-info" style="display:none;">
+      <p><strong>Name:</strong> <span id="stuName"></span></p>
+      <p><strong>ID:</strong> <span id="stuID"></span></p>
+      <p><strong>Classes:</strong> <span id="stuClasses"></span></p>
+      <p><strong>Tests Taken:</strong> <span id="stuTests"></span></p>
+      <button id="downloadStudentBtn" class="btn">Download Info</button>
+    </div>
+  </div>
+  
+  <!-- 🔥 Dynamic Reports Container -->
+  <div class="reports-container">
+    <!-- Grade Overview Panel (could be a chart later) -->
+    <div class="report-panel">
+      <h3>Class Performance Overview</h3>
+      <!-- Use your favorite chart lib to plot classes[].avg_attendance -->
+      <canvas id="attendanceChart"></canvas>
+    </div>
+    
+    <!-- Attendance Records Panel -->
+    <div class="report-panel" style="
+    overflow-y: auto;
+    height: 45vh;
+">
+      <h3>Attendance Records</h3>
+      <table>
+        <thead>
+          <tr><th>Class</th><th>Average Attendance</th></tr>
+        </thead>
+        <tbody>
+          {% for c in classes %}
+          <tr>
+            <td>{{ c.class_name }}</td>
+            <td>{{ c.avg_attendance }}%</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="2">No attendance data yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Exam Results Panel -->
+    <div class="report-panel" style="grid-column:1/-1;">
+      <h3>Tests Results</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Exam</th><th>Average Score</th><th>Top Performer</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in test_stats %}
+          <tr>
+            <td>{{ t.title }}</td>
+            <td>{{ t.avg_score }}%</td>
+            <td>{{ t.top_name }} ({{ t.top_score }}%)</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3">No test results yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>      
+    
+    <!-- Classroom Analytics Panel (Full Width) -->
+    <div class="report-panel teacher-comments" style="grid-column:1/-1;">
+      <h3>Classroom Analytics</h3>
+      <p>
+        You can expand here: show trends, improvement rates, heatmaps, whatever 🔥.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Render attendanceChart from classes[]
+const ctx = document.getElementById('attendanceChart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: {{ classes|map(attribute='class_name')|list|tojson }},
+    datasets: [{
+      label: 'Avg Attendance (%)',
+      data: {{ classes|map(attribute='avg_attendance')|list|tojson }}
+    }]
+  },
+  options: { scales: { y: { beginAtZero:true, max:100 } } }
+});
+</script>
+<script>
+  const searchBtn = document.getElementById('studentSearchBtn');
+  const infoDiv   = document.getElementById('studentInfo');
+  let lastResult  = null;
+
+  searchBtn.addEventListener('click', () => {
+    const q = document.getElementById('studentSearchInput').value.trim();
+    if (!q) return showPopup('Please enter name or ID.');
+    fetch(`{{ url_for('teacher.find_student') }}?q=${encodeURIComponent(q)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) {
+          showPopup(data.error);
+          infoDiv.style.display = 'none';
+          return;
+        }
+        // If redirect happened, the browser sees 302; we need JSON, so
+        // better: change find_student to return JSON directly rather than redirect.
+        // For now let's handle direct JSON from student_info:
+        if (data.student) {
+          lastResult = data;
+          document.getElementById('stuName').textContent    = data.student.student_name;
+          document.getElementById('stuID').textContent      = data.student.enroll_number;
+          // list classes
+          document.getElementById('stuClasses').textContent = data.classes.map(c=>c.class_name).join(', ') || '—';
+          // list tests
+          document.getElementById('stuTests').textContent   = data.tests.map(t=>`${t.title} (${t.score}%)`).join('; ') || '—';
+          infoDiv.style.display = 'block';
+        } else {
+          showPopup('Unexpected response.');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        showPopup('Error fetching data.');
+      });
+  });
+
+  document.getElementById('downloadStudentBtn').addEventListener('click', () => {
+    if (!lastResult) return;
+    const { student, classes, tests } = lastResult;
+    let text = `Name: ${student.student_name}\nID: ${student.enroll_number}\nEmail: ${student.email}\n\n`;
+    text += 'Classes:\n';
+    classes.forEach(c=> text += ` - ${c.class_name} on ${c.class_date}\n`);
+    text += '\nTests:\n';
+    tests.forEach(t=> text += ` - ${t.title}: ${t.score}% (${t.grade}) on ${t.submitted_at}\n`);
+    const blob = new Blob([text], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${student.student_name.replace(/\s+/g,'_')}_report.txt`;
+    link.click();
+  });
+
+  // simple toast
+  function showPopup(msg){
+    const pop = document.createElement('div');
+    pop.className='popup-message';
+    pop.innerText=msg;
+    document.body.appendChild(pop);
+    requestAnimationFrame(()=>pop.classList.add('show'));
+    setTimeout(()=>{
+      pop.classList.remove('show');
+      pop.addEventListener('transitionend',()=>pop.remove(),{once:true});
+    },3000);
+  }
+</script>
+<script src="{{ url_for('static', filename='js/Teacher_Dashboard.js') }}"></script>
+{% endblock %}

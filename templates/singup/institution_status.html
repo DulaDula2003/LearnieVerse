@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Institution Request Status</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    body {
+      background: #F4F2DE;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .status-container {
+      background: #fff;
+      border: 1px solid #000;
+      border-radius: 15px;
+      padding: 2rem;
+      max-width: 500px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .status {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .status-link {
+      display: inline-block;
+      font-size: 18px;
+      font-weight: 700;
+      color: #CA7979;
+      text-decoration: none;
+      border: 2px solid #CA7979;
+      padding: 0.7rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+    }
+
+    .status-link:hover {
+      background: #CA7979;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="status-container">
+    {% if status == 'approved' %}
+      <div class="status">Your institution request has been approved!</div>
+      <script>
+        setTimeout(function() {
+          window.location.href = "{{ url_for('institute.dashboard') }}";
+        }, 3000);
+      </script>
+    {% elif status == 'pending' %}
+      <div class="status">Your institution request is still pending approval.</div>
+      <a href="{{ url_for('home') }}" class="status-link">Return to Home</a>
+    {% elif status == 'rejected' %}
+      <div class="status">Your institution request has been rejected.</div>
+      <a href="{{ url_for('home') }}" class="status-link">Return to Home</a>
+    {% else %}
+      <div class="status">Status unknown.</div>
+      <a href="{{ url_for('home') }}" class="status-link">Return to Home</a>
+    {% endif %}
+  </div>
+</body>
+</html>

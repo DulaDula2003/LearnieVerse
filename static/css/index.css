@@ -1,0 +1,975 @@
+/* GLOBAL RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif; /* Applies to everything */
+  }
+
+  /* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #E9B384;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d17a3b;
+}
+  
+  /* BODY */
+  body {
+    background-color: #f5f1da;
+    text-align: center; /* Inherits for headings, sections, etc. */
+  }
+  
+  /* NAVBAR */
+  .navbar {
+    display: flex;
+    flex-direction: column;    
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    height: 100px;
+  }
+  
+  .logo {
+    font-size: 32px;
+    font-weight: 700;
+    color: #7C9D96;
+  }
+  
+  .nav-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    max-width: 900px;
+    background: #FFFFFF;
+    border-radius: 25px;
+    padding: 10px 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative; /* for the button */
+  }
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-links a:hover {
+    color: #e58f48;
+  }
+  
+  .get-started {
+    text-decoration: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #E9B384;
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .get-started:hover {
+    background-color: #d17a3b;
+  }
+  
+  /* HERO SECTION */
+  .hero {
+    position: relative; /* For the ::before layering */
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 4rem 1rem;
+    overflow: hidden;
+    border-radius: 25px;
+  }
+  
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    background: linear-gradient(180deg, #7C9D96 0%, #CBDEBD 100%);
+    border-radius: inherit;
+    clip-path: inset(0 round 25px);
+    z-index: -1;
+  }
+  
+  .hero-content {
+    position: relative; /* Ensures hero-content is above ::before */
+  }
+  
+  /* Main Heading */
+  .hero-content h1 {
+    font-weight: 700;
+    font-size: 63px;
+    line-height: 75px;
+    letter-spacing: -0.25px;
+    color: #FDFBDC;
+    margin-bottom: 4rem;
+  }
+  
+  /* Info Boxes Container */
+  .info-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    justify-content: center;
+  }
+  
+  /* Individual Info Box */
+  .info-box {
+    background: #E9B384;
+    border: 15px solid #F4F2DE;
+    border-radius: 25px;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .info-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  }
+  
+  /* Sub-heading text inside each box */
+  .sub-heading {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 45px;
+    color: #000;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  /* MEDIA QUERIES for responsiveness */
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+    .info-box {
+      width: 220px;
+      height: auto;
+      padding: 1rem;
+    }
+    .sub-heading {
+      font-size: 24px;
+      line-height: 1.3;
+    }
+  }
+  
+  /* BADGE-STYLE SECTION WITH ENHANCED MICRO-INTERACTIONS */
+  .badge-section {
+    background-color: #f5f1da;
+    padding: 3rem 1rem;
+    overflow: hidden;
+  }
+  
+  .badge-heading {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 2rem;
+  }
+  
+  /* Grid container for badges */
+  .badge-container {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Individual badge card */
+  .badge {
+    position: relative;
+    background: #CBDEBD;
+    border-radius: 20px;
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease forwards;
+    opacity: 0;
+  }
+  
+  /* Staggered animation delay */
+  .badge:nth-child(1) { animation-delay: 0.2s; }
+  .badge:nth-child(2) { animation-delay: 0.4s; }
+  .badge:nth-child(3) { animation-delay: 0.6s; }
+  .badge:nth-child(4) { animation-delay: 0.8s; }
+  
+  /* Alternate background for variation */
+  .badge.alt {
+    background: #D7E5C9;
+  }
+  
+  /* Hover effect for card */
+  .badge:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  }
+  
+  /* Diagonal ribbon accent */
+  .ribbon {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 120px;
+    height: 120px;
+    background: #E9B384;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+    z-index: 1;
+    border-radius: 25%;
+  }
+  
+  .badge:hover .ribbon {
+    transform: rotate(225deg);
+  }
+  
+  /* Circular icon area with pulse on hover */
+  .badge-icon {
+    width: 60px;
+    height: 60px;
+    background: #E9B384;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease;
+  }
+  
+  .badge:hover .badge-icon {
+    animation: pulse 1s infinite;
+  }
+  
+  /* Font Awesome icon styling */
+  .badge-icon i {
+    color: #fff;
+    font-size: 1.5rem;
+  }
+  
+  /* Badge Title */
+  .badge h3 {
+    font-size: 1.3rem;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Badge Description */
+  .badge p {
+    font-size: 1rem;
+    line-height: 1.4;
+    font-weight: 500;
+    color: #000;
+    position: relative;
+    z-index: 2;
+    max-width: 250px;
+    margin: 0.5rem auto 0;
+  }
+  
+  /* Discover More Button */
+  .action-button-container {
+    margin-top: 2rem;
+  }
+  
+  .action-button {
+    background: #E9B384;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  
+  .action-button:hover {
+    background: #d17a3b;
+    transform: translateY(-3px);
+  }
+  
+  /* Keyframes for fadeInUp animation */
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Keyframes for pulse animation */
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  
+  /* RESPONSIVE TWEAKS FOR BADGE SECTION */
+  @media (max-width: 768px) {
+    .badge-heading {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .badge {
+      padding: 2rem 1rem 1.5rem;
+    }
+    .ribbon {
+      width: 90px;
+      height: 90px;
+    }
+    .badge-icon {
+      width: 50px;
+      height: 50px;
+    }
+    .badge-icon i {
+      font-size: 1.2rem;
+    }
+    .badge h3 {
+      font-size: 1.2rem;
+    }
+    .badge p {
+      font-size: 0.9rem;
+    }
+    .action-button {
+      font-size: 1rem;
+      padding: 0.7rem 1.5rem;
+    }
+  }
+  
+  /* HOW IT WORKS SECTION */
+  .how-it-works {
+    background: #CBDEBD;
+    padding: 4rem 1rem;
+  }
+  
+  .how-it-works .section-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 2rem;
+  }
+  
+  .steps-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .step {
+    background: #fff;
+    border-radius: 15px;
+    padding: 2rem;
+    flex: 1 1 300px;
+    max-width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .step:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  }
+  
+  .step-icon {
+    width: 60px;
+    height: 60px;
+    background: #E9B384;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+  }
+  
+  .step-icon i {
+    font-size: 1.5rem;
+    color: #fff;
+  }
+  
+  .step h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: #000;
+    font-weight: 700;
+  }
+  
+  .step p {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.4;
+  }
+  
+  /* TESTIMONIAL SECTION (SPEECH BUBBLE STYLE) */
+  .testimonial-section-alt {
+    margin: 50px 0;
+    position: relative;
+    background: #F4D8AE;
+    padding: 4rem 1rem;
+    border-radius: 0 50px; /* Curved top-right corner */
+  }
+  
+  .testimonial-heading {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #000;
+  }
+  
+  .testimonial-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+  }
+  
+  .testimonial-bubble {
+    position: relative;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 20px;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-align: left;
+  }
+  
+  .testimonial-bubble.alt {
+    background: #FAFAFA;
+  }
+  
+  /* Speech bubble arrow */
+  .testimonial-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 40px;
+    border: 10px solid transparent;
+    border-top-color: #fff;
+  }
+  
+  .testimonial-bubble.alt::after {
+    border-top-color: #FAFAFA;
+  }
+  
+  /* Hover effect */
+  .testimonial-bubble:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  }
+  
+  /* Avatar (circular user image) */
+  .avatar {
+    background-color: #e7e1df;
+    object-fit: contain;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+  }
+  
+  /* Container for heading + paragraph */
+  .testimonial-text {
+    flex: 1;
+  }
+  
+  .testimonial-text h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: #000;
+  }
+  
+  .testimonial-text h5{
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+  
+  .testimonial-text p {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #10505B;
+  }
+  
+  /* Responsive tweaks for testimonial bubbles */
+  @media (max-width: 768px) {
+    .testimonial-bubble {
+      max-width: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .avatar {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 0.5rem;
+    }
+    .testimonial-text h3 {
+      font-size: 1rem;
+    }
+    .testimonial-text p {
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* HERO SECTION 4 (Teacher, Student, Institute) */
+  .hero-section-4 {
+    max-width: 1438px;
+    margin: 4rem auto 0; /* 4rem top, no extra bottom margin */
+    padding: 2rem;
+    position: relative;
+  }
+  
+  .hero-4-bgbox {
+    background: #fff;
+    border-radius: 25px;
+    position: relative; /* So arrows can be absolutely positioned inside */
+  }
+  
+  /* Heading */
+  .hero-4-heading {
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Diagram Container */
+  .diagram-container {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "teacher student"
+      "institute institute";
+    column-gap: 16rem;
+    justify-items: center;
+  }
+  
+  /* Teacher Box */
+  .teacher-box {
+    grid-area: teacher;
+    border-radius: 25px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+  }
+  
+  .teacher-img {
+    width: 150px;
+    height: 200px;
+    background: url("../images/Teacher.png") no-repeat center/cover, #CA7979;
+    border-radius: 25px;
+    margin-bottom: 1rem;
+  }
+  
+  .teacher-box h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .teacher-box p {
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #CA7979;
+  }
+  
+  /* Student Box */
+  .student-box {
+    grid-area: student;
+    border-radius: 25px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+    text-align: right;
+  }
+  
+  .student-img {
+    width: 150px;
+    height: 200px;
+    background: url("../images/Student.png") no-repeat center/cover, #E9B384;
+    border-radius: 25px;
+    margin: 0 0 1rem auto;
+  }
+  
+  .student-box h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .student-box p {
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #E9B384;
+  }
+  
+  /* Institute Box */
+  .institute-box {
+    grid-area: institute;
+    border-radius: 25px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+  }
+  
+  .institute-img {
+    width: 150px;
+    height: 200px;
+    background: url("../images/Intitute.png") no-repeat center/cover, #A1CCD1;
+    border-radius: 25px;
+    margin: 0 auto 1rem;
+  }
+  
+  .institute-box h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .institute-box p {
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #A1CCD1;
+  }
+  
+  /* Ellipse with <=> symbol */
+  .ellipse-6 {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    background: #fff;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 50%;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .ellipse-6 .symbol {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 700;
+    font-size: 35px;
+    color: #000;
+  }
+  
+  /* Arrows (hidden or repositioned as needed) */
+  .arrow {
+    position: absolute;
+  }
+  
+  @media (max-width: 768px) {
+    .hero-4-heading {
+      font-size: 1.6rem;
+    }
+    .diagram-container {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "teacher"
+        "student"
+        "institute";
+    }
+    .teacher-box,
+    .student-box,
+    .institute-box {
+      max-width: 100%;
+      text-align: center;
+    }
+    /* Hide ellipse & arrows on small screens if needed */
+    .arrow,
+    .ellipse-6 {
+      display: none;
+    }
+  }
+  
+  /* CONTACT SECTION WRAPPER */
+  .contact-section {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem 1rem 0; /* Removed extra top padding */
+  }
+  
+  /* Heading area */
+  .contact-heading h2 {
+    font-size: 2.5rem;
+    color: #CA7979;
+    margin-bottom: 2rem;
+    font-weight: 700;
+  }
+  
+  .contact-heading p {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    max-width: 700px;
+    margin: 0 auto 4rem;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  /* Grid container for the three boxes */
+  .contact-container {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    justify-items: center;
+  }
+  
+  /* Base styles for each box */
+  .contact-box {
+    border-radius: 25px;
+    width: 100%;
+    max-width: 432px;
+    padding: 1.5rem;
+    text-align: center;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.3;
+  }
+  
+  /* Box 1: Email */
+  .email-box {
+    background: #CA7979;
+    color: #fff;
+  }
+  
+  /* Underline the email address */
+  .email-box .contact-info {
+    text-decoration: underline;
+  }
+  
+  /* Box 2: Phone */
+  .phone-box {
+    background: #EDACAC;
+    color: #fff;
+    box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);
+  }
+  
+  /* Box 3: Address */
+  .address-box {
+    background: #fff;
+    border: 3px solid #CA7979;
+    color: #EDACAC;
+  }
+  
+  /* Headings inside each box (E-Mail, Phone, Address) */
+  .contact-box h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Main contact info text */
+  .contact-info {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+  
+  /* Responsive contact section */
+  @media (max-width: 768px) {
+    .contact-heading h2 {
+      font-size: 1.8rem;
+    }
+    .contact-heading p {
+      font-size: 0.9rem;
+    }
+    .contact-box h3 {
+      font-size: 1.2rem;
+    }
+    .contact-info {
+      font-size: 1rem;
+    }
+  }
+  
+  /* MAP SECTION */
+  .map-section {
+    max-width: 80%;
+    margin: 3rem auto;
+    padding: 1rem;
+    background: #E9B384;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .map-wrapper {
+    width: 100%;
+    max-width: 1259px;
+  }
+  
+  .map-frame {
+    width: 100%;
+    height: 400px;  /* Adjust as needed */
+    border-radius: 25px;
+    border: none;
+  }
+  
+  /* FOOTER SECTION */
+  .footer-section {
+    background: #C7D2C3;
+    max-width: 1518px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    color: #000;
+  }
+  
+  /* Container for the 3 columns */
+  .footer-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: start;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+  
+  /* Each column in the footer */
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: auto;
+  }
+  
+  /* LOGO & TITLE */
+  .logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  /* Circular logo image */
+  .footer-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border: 1px solid #000; /* remove if not needed */
+    border-radius: 50%;
+  }
+  
+  /* "LearnieVerse" text next to the logo */
+  .footer-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  
+  /* BRAND DESCRIPTION */
+  .footer-desc {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    max-width: 412px;
+  }
+  
+  /* EMAIL TEXT */
+  .footer-email {
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  
+  /* FOLLOW US & LEGAL HEADINGS */
+  .footer-heading {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* PHONE TEXT */
+  .footer-phone {
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  
+  /* ADDRESS TEXT */
+  .footer-address {
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  
+  /* HORIZONTAL LINE */
+  .footer-line {
+    border: 0;
+    border-top: 2px solid #000;
+    margin: 0 auto;
+    width: 90%;
+  }
+  
+  /* COPYRIGHT TEXT */
+  .footer-copy {
+    font-size: 0.9rem;
+    font-weight: 300;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+  
+  /* Responsive footer tweaks */
+  @media (max-width: 768px) {
+    .footer-container {
+      display: block; /* Stack columns in one block or use grid if you prefer */
+      text-align: center;
+    }
+    .footer-title {
+      font-size: 1rem;
+    }
+    .footer-desc,
+    .footer-email,
+    .footer-phone,
+    .footer-address,
+    .footer-heading,
+    .footer-copy {
+      font-size: 0.8rem;
+    }
+    .footer-logo {
+      width: 50px;
+      height: 50px;
+    }
+  }
+  

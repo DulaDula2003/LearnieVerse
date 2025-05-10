@@ -1,0 +1,170 @@
+{% extends "student/base.html" %}
+{% block title %}LearnieVerse – Your Reports{% endblock %}
+
+{% block content %}
+  <div class="institute-info">
+    <h1>{{ session.institute_name }}</h1>
+    {% if latest %}
+      <h2>Report for {{ student_name }} on {{ latest.report_date }}</h2>
+    {% else %}
+      <h2>No Reports Available</h2>
+    {% endif %}
+  </div>
+
+  {% if latest %}
+  <div class="reports-container">
+
+    <!-- Classes Attended Panel -->
+    <aside class="card report-panel attendance-overview">
+      <h3>Classes Attended</h3>
+      {% if classes_att %}
+        <ul class="class-list">
+          {% for cl in classes_att %}
+          <li>
+            <strong>{{ cl.class_name }}</strong> — {{ cl.pct }}%
+            <table class="attendance-detail">
+              <thead>
+                <tr><th>Date</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                {% for row in cl.records %}
+                <tr>
+                  <td>{{ row.attendance_date }}</td>
+                  <td>
+                    {% if row.status=='present' %}
+                      <i class="fas fa-check text-success"></i>
+                    {% else %}
+                      <i class="fas fa-times text-danger"></i>
+                    {% endif %}
+                    {{ row.status.capitalize() }}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No attendance records found.</p>
+      {% endif %}
+    </aside>
+
+    <!-- Grade Overview Panel -->
+    <div class="card report-panel grade-overview">
+      <h3>Grade Overview</h3>
+      <ul>
+        {% for sub in latest.subjects %}
+          <li>{{ sub.subject_name }}: {{ sub.percentage }}%</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Exam Results Panel -->
+    <div class="card report-panel exam-results" style=" grid-column: -1/1;">
+      <h3>Marks</h3>
+      <table>
+        <thead>
+          <tr><th>Subject</th><th>Marks</th></tr>
+        </thead>
+        <tbody>
+          {% for sub in latest.subjects %}
+          <tr>
+            <td>{{ sub.subject_name }}</td>
+            <td>{{ sub.marks }}/100</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Remarks Panel -->
+    <div class="card report-panel teacher-comments">
+      <h3>Remarks & Summary</h3>
+      <p>{{ latest.remarks }}</p>
+      <p><strong>Total Percentage:</strong> {{ latest.total_percentage }}%</p>
+      <p><em>Academic Year:</em> {{ latest.academic_year }}</p>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block right_panel %}
+<aside class="right-panel">
+  <div class="card previous-reports-card" style="
+  max-height: 100%;
+  background: none;
+  border: none;
+">
+    <h4>Previous Reports</h4>
+    {% if history %}
+      <ul class="report-history-list">
+        {% for r in history %}
+        <li class="report-item">
+          <div class="report-meta">
+            <span class="report-date">{{ r.report_date.strftime('%d-%m-%Y') }}</span>
+            <span class="report-score">{{ r.total_percentage }}%</span>
+          </div>
+          <a href="{{ url_for('student.reports', report_id=r.id) }}"
+             class="btn btn-sm view-btn">
+            View
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="no-history">You have no earlier reports.</p>
+    {% endif %}
+  </div>
+</aside>
+
+<style>
+  .previous-reports-card {
+    padding: 1rem;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .previous-reports-card h4 {
+    margin-bottom: 0.75rem;
+  }
+  .report-history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .report-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  .report-item:last-child {
+    border-bottom: none;
+  }
+  .report-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.95rem;
+    color: #555;
+  }
+  .report-date {
+    
+    font-weight: 500;
+  }
+  .report-score {
+    font-weight: 700;
+    color: #333;
+  }
+  .view-btn {
+    padding: 0.25rem 0.5rem;
+    text-decoration: none;
+    color: white;
+  }
+  .no-history {
+    color: #888;
+    font-style: italic;
+    margin-top: 1rem;
+  }
+</style>
+{% endblock %}

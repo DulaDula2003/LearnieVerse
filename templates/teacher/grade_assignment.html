@@ -1,0 +1,58 @@
+{% extends "teacher/base.html" %}
+{% block title %}Grade Assignment - LearnieVerse{% endblock %}
+
+{% block content %}
+<main class="main-content">
+  <div class="institute-info">
+    <h1>{{ institute_name }}</h1>
+    <h2>Grading - {{ test_title }}</h2>
+  </div>
+
+  <div class="cards-container">
+    <div class="card" style="width:100%;">
+      <h4>Student Submissions</h4>
+
+      {% if students and students|length > 0 %}
+      <table class="students-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Grade</th>
+            <th>Result</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in students %}
+          <tr id="row-{{ s.id }}">
+            <td>{{ s.name }}</td>
+            <td>{{ s.score_pct }}%</td>
+            <td>{{ s.grade }}</td>
+            <td class="result-cell">{{ s.result }}</td>
+            <td>
+              {% if s.confirmed %}
+                <span class="status-confirmed">Confirmed</span>
+              {% else %}
+                <span class="status-pending">Pending</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{{ url_for('teacher.review_submission', test_id=test_id, student_id=s.id) }}" class="btn">Review</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="no-submissions">
+        <p><i class="fas fa-info-circle"></i> No submissions found for this test yet.</p>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</main>
+{% endblock %}
+{% block right_panel %}{% endblock %}

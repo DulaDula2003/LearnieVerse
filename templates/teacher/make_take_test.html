@@ -1,0 +1,242 @@
+{% extends "teacher/base.html" %}
+
+{% block title %}LearnieVerse - Make &amp; Take Test{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ institute_name }}</h1>
+  <h2>Create a New Test Paper</h2>
+</div>
+
+<div class="cards-container">
+  <div class="t-card">
+    <h4>Create a New Test Paper</h4>
+    <form id="createTestForm" method="POST" action="{{ url_for('teacher.make_take_test') }}">
+      <label for="test-title">Test Title</label>
+      <input type="text" id="test-title" name="test-title" placeholder="Enter test title" required />
+
+      <label for="test-subject">Subject</label>
+      <input type="text" id="test-subject" name="test-subject" placeholder="Enter subject" required />
+
+      <label for="test-duration">Duration (minutes)</label>
+      <input type="number" id="test-duration" name="test-duration" placeholder="Enter duration" required />
+
+      <label for="test-date">Test Date</label>
+      <input type="date" id="test-date" name="test-date" required />
+
+      <label for="test-time">Test Time</label>
+      <input type="time" id="test-time" name="test-time" required />
+
+      <!-- Select Students Section -->
+      <div class="anc-form-group">
+        <!-- Select Students Section -->
+        <label>Select Students:</label>
+        <div class="students-selection">
+          <!-- "Everyone" Option -->
+          <div class="anc-student-item">
+            <input type="checkbox" id="student-everyone" name="students" value="everyone">
+            <div class="anc-student-info">
+              <span class="anc-student-name"><strong>Everyone</strong></span>
+              <span class="anc-student-id">All students</span>
+            </div>
+          </div>
+
+          <!-- Individual Students -->
+          {% for student in student_list %}
+          <div class="anc-student-item">
+            <input type="checkbox" id="student{{ loop.index }}" name="students" value="{{ student.id }}">
+            <img class="anc-student-dp"
+              src="{{ url_for('static', filename='uploads/' ~ (student.profile_pic if student.profile_pic else 'User.jpg')) }}"
+              alt="{{ student.student_name }}">
+            <div class="anc-student-info">
+              <span class="anc-student-name">{{ student.student_name }}</span>
+              <span class="anc-student-id">ID: {{ student.id }}</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Fallback message -->
+        {% if not student_list %}
+        <p style="color: gray; font-style: italic;">No students assigned to your profile yet.</p>
+        {% endif %}
+
+      </div>
+
+      <button type="submit" class="btn">Make Test</button>
+    </form>
+  </div>
+
+  <!-- Current Tests (Draft) -->
+  <div class="card">
+    <h4>Current Tests</h4>
+    <ul>
+      {% for test in current_tests %}
+      <li>
+        <span class="test-title">{{ test.title }}</span>
+        <span class="test-date">{{ test.test_date.strftime('%d/%m/%Y') }}</span>
+        <button type="button" class="btn view-details-btn" data-test='{{ test | tojson | safe }}'
+          onclick="showTestDetails(this)">
+          View Details
+        </button>
+
+        <!-- Edit Button -->
+        <a href="{{ url_for('teacher.edit_test', test_id=test.id) }}" class="btn edit-btn">Edit</a>
+
+        <!-- Delete Button -->
+        <form action="{{ url_for('teacher.delete_test', test_id=test.id) }}" method="POST" style="display:inline;">
+          <button type="submit" class="btn delete-btn">Delete</button>
+        </form>
+
+        <!-- Button to make the test live -->
+        <form action="{{ url_for('teacher.update_test_status', test_id=test.id, new_status='live') }}" method="POST"
+          style="display:inline;">
+          <button type="submit" class="btn live-btn">Make Live</button>
+        </form>
+      </li>
+      {% else %}
+      <li><em>No current tests yet.</em></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Live Tests -->
+  <div class="card">
+    <h4>Live Tests</h4>
+    <ul>
+      {% for test in live_tests %}
+      <li>
+        <span class="test-title">{{ test.title }}</span>
+        <span class="test-date">{{ test.test_date.strftime('%d/%m/%Y') }}</span>
+        <button type="button" class="btn view-details-btn" data-test='{{ test | tojson | safe }}'
+          onclick="showTestDetails(this)">
+          View Details
+        </button>
+        <!-- Mark Completed -->
+        <form action="{{ url_for('teacher.update_test_status', test_id=test.id, new_status='past') }}" method="POST"
+          style="display:inline;">
+          <button type="submit" class="btn complete-btn">Mark as Completed</button>
+        </form>
+      </li>
+      {% else %}
+      <li><em>No live tests available.</em></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Past Tests -->
+  <div class="row past-tests-row">
+    <div class="card">
+      <h4>Past Tests</h4>
+      <ul class="past-tests-list">
+        {% for test in past_tests %}
+        <li>
+          <span class="test-title">{{ test.title }}</span>
+          <span class="test-status completed">Completed</span>
+          <button type="button" class="btn view-details-btn" data-test='{{ test | tojson | safe }}'
+            onclick="showTestDetails(this)">
+            View Details
+          </button>
+        </li>
+        {% else %}
+        <li><em>No past tests available.</em></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Test Details Modal -->
+<div id="testDetailsModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeTestModal()">&times;</span>
+    <h3 id="modalTestTitle"></h3>
+    <p><strong>Subject:</strong> <span id="modalSubject"></span></p>
+    <p><strong>Date:</strong> <span id="modalDate"></span></p>
+    <p><strong>Time:</strong> <span id="modalTime"></span></p>
+    <p><strong>Duration:</strong> <span id="modalDuration"></span> mins</p>
+    <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+    <p><strong>Created on:</strong> <span id="modalCreatedAt"></span></p>
+  </div>
+</div>
+
+<style>
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+  }
+
+  .modal-content {
+    background: white;
+    padding: 20px;
+    margin: 10% auto;
+    max-width: 400px;
+    border-radius: 10px;
+    position: relative;
+  }
+
+  .modal .close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
+    font-size: 1.5em;
+  }
+</style>
+
+<script>
+  // Show test details in modal
+  function showTestDetails(button) {
+    let testData = button.getAttribute('data-test');
+    try {
+      let test = JSON.parse(testData);
+      document.getElementById('modalTestTitle').textContent = test.title || "No Title";
+      document.getElementById('modalSubject').textContent = test.subject || "No Subject";
+      let testDate = test.test_date ? new Date(test.test_date) : new Date();
+      document.getElementById('modalDate').textContent = testDate.toLocaleDateString();
+      document.getElementById('modalTime').textContent = test.test_time || "Not Set";
+      document.getElementById('modalDuration').textContent = test.duration || "N/A";
+      document.getElementById('modalStatus').textContent = test.status ? test.status.charAt(0).toUpperCase() + test.status.slice(1) : "Unknown";
+      let createdAt = test.created_at ? new Date(test.created_at) : new Date();
+      document.getElementById('modalCreatedAt').textContent = createdAt.toLocaleString();
+      document.getElementById('testDetailsModal').style.display = 'block';
+    } catch (error) {
+      console.error("Error parsing test data:", error);
+    }
+  }
+
+  // Close the modal
+  function closeTestModal() {
+    document.getElementById('testDetailsModal').style.display = 'none';
+  }
+
+  // Get the "Everyone" checkbox
+  const everyoneCheckbox = document.getElementById('student-everyone');
+
+  // Get all individual student checkboxes
+  const individualCheckboxes = document.querySelectorAll('.students-selection input[type="checkbox"]:not(#student-everyone)');
+
+  // When "Everyone" is toggled
+  everyoneCheckbox.addEventListener('change', function () {
+    individualCheckboxes.forEach(checkbox => {
+      checkbox.checked = everyoneCheckbox.checked;
+    });
+  });
+
+  // When any individual student checkbox is toggled
+  individualCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      // If all individual checkboxes are checked, check "Everyone"
+      const allChecked = Array.from(individualCheckboxes).every(cb => cb.checked);
+      everyoneCheckbox.checked = allChecked;
+    });
+  });
+</script>
+<script src="{{ url_for('static', filename='js/Teacher_Dashboard.js') }}" defer></script>
+{% endblock %}
+{% block right_panel %}{% endblock %}

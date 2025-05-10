@@ -1,0 +1,150 @@
+{% extends "teacher/base.html" %}
+{% block title %}LearnieVerse - Make Report{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ session.institute_name }}</h1>
+  <h2>Generate Student Report</h2>
+</div>
+
+<div class="report-container">
+  <h2>Student Report</h2>
+
+  <form id="reportForm" method="POST" action="{{ url_for('teacher.submit_report') }}">
+    <input type="hidden" name="student_id" value="{{ student.id }}">
+
+    <!-- Student Info -->
+    <div class="form-group">
+      <label for="student-name">Student Name:</label>
+      <input type="text" id="student-name" name="student_name" value="{{ student.student_name }}" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="class">Class:</label>
+      <input type="text" id="class" name="class_name" value="{{ student.course }}" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date" required>
+    </div>
+
+    <div class="form-group">
+      <label for="year">Academic Year:</label>
+      <input type="number" id="year" name="year" min="2000" max="2050" value="2025" required>
+    </div>
+
+    <!-- Attendance -->
+    <div class="form-group">
+      <label for="attendance">Attendance Percentage:</label>
+      <input type="number" id="attendance" name="attendance_pct" value="{{ attendance_percentage }}" readonly>
+    </div>
+
+    <!-- Attendance Breakdown Table -->
+    <div class="form-group">
+      <h3>Attendance Breakdown</h3>
+      <table class="students-table">
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in attendance_records %}
+          <tr>
+            <td>{{ a.class_name }}</td>
+            <td>{{ a.attendance_date }}</td>
+            <td>
+              {% if a.status == 'present' %}
+                <span style="color: green;">Present</span>
+              {% else %}
+                <span style="color: red;">Absent</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Remarks -->
+    <div class="form-group">
+      <label for="remarks">Teacher's Remarks:</label>
+      <textarea id="remarks" name="remarks" rows="4" placeholder="Write remarks here..."></textarea>
+    </div>
+
+    <!-- Subject-Wise Results -->
+    <h3>Subject-wise Results</h3>
+    <table id="subjectTable" class="students-table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Marks (Out of 100)</th>
+          <th>Percentage (%)</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for test in tests %}
+        <tr>
+          <td><input type="text" name="subject[]" value="{{ test.subject }}" readonly></td>
+          <td><input type="number" class="marks-input" name="marks[]" value="{{ test.score }}" max="100" required></td>
+          <td class="percentage">{{ test.score }}%</td>
+          <td><button type="button" class="btn remove-row">Remove</button></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Total Percentage -->
+    <div class="form-group">
+      <label for="total-percentage">Total Percentage:</label>
+      <input type="text" id="total-percentage" name="total_percentage" readonly value="0%">
+    </div>
+
+    <!-- Submit Report -->
+    <button type="submit" class="btn">Submit Report</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Remove test row
+  document.querySelectorAll('.remove-row').forEach(btn => {
+    btn.addEventListener('click', function () {
+      this.closest('tr').remove();
+      updateTotalPercentage();
+    });
+  });
+
+  // Update total percentage
+  document.querySelectorAll('.marks-input').forEach(input => {
+    input.addEventListener('input', updateTotalPercentage);
+  });
+
+  function updateTotalPercentage() {
+    let rows = document.querySelectorAll('#subjectTable tbody tr');
+    let total = 0;
+    let count = 0;
+
+    rows.forEach(row => {
+      const markInput = row.querySelector('.marks-input');
+      const mark = parseFloat(markInput.value || 0);
+      if (!isNaN(mark)) {
+        total += mark;
+        count++;
+        row.querySelector('.percentage').textContent = `${mark}%`;
+      }
+    });
+
+    const avg = count > 0 ? (total / count).toFixed(2) : 0;
+    document.getElementById('total-percentage').value = `${avg}%`;
+  }
+
+  updateTotalPercentage(); // Init
+</script>
+{% endblock %}
+{% block right_panel %}{% endblock %}

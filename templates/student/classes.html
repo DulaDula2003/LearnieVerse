@@ -1,0 +1,54 @@
+{% extends "student/base.html" %}
+
+{% block title %}LearnieVerse - Classes{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ student.institution_name if student.institution_name else "Institute Name" }}</h1>
+  <h2>Classes Dashboard</h2>
+</div>
+
+<div class="cards-container">
+  <!-- All Classes Section -->
+  <div class="classes-cards">
+    <h3 class="section-title">Classes</h3>
+    <div class="row">
+      {% if classes %}
+      {% for class in classes %}
+      <div class="card">
+        <h4>{{ class.class_name }}</h4>
+        <p>Teacher: {{ class.teacher_name }}</p>
+        <img
+          src="{{ url_for('static', filename='uploads/' ~ (class.profile_pic if class.profile_pic else 'User.jpg')) }}"
+          alt="Teacher Profile" class="teacher-profile">
+        <p>
+          {% if class.class_time is not none %}
+          {% set hour = class.class_time.seconds // 3600 %}
+          {% set minute = (class.class_time.seconds // 60) % 60 %}
+          {{ '%02d:%02d' | format(hour, minute) }}
+          {% else %}
+          --
+          {% endif %}
+          on {{ class.class_date.strftime('%d %b %Y') }}
+          {% if class.id in live_class_ids %}
+          <span class="live-tag">🔴 Live Now</span>
+          {% elif class.id in upcoming_class_ids %}
+          <span class="upcoming-tag">🕒 Upcoming</span>
+          {% endif %}
+
+        </p>
+        <a href="{{ url_for('student.join_class', class_id=class.id) }}" class="btn take-class-btn">View Details</a>
+      </div>
+      {% endfor %}
+
+      {% else %}
+      <div class="card">
+        <p>No classes found.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block right_panel %}{% endblock %}

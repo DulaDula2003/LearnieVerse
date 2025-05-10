@@ -1,0 +1,68 @@
+{% extends "admin/base.html" %}
+{% block title %}LearnieVerse Admin – User Management{% endblock %}
+
+{% block content %}
+  <div class="institute-info">
+    <h1>User Management</h1>
+  </div>
+
+  <div class="user-list-card">
+
+    <!-- Search & Role Filter -->
+    <form method="get" class="search-filter-container">
+      <input
+        type="text"
+        name="search"
+        placeholder="Search by ID or email"
+        value="{{ search }}"
+        style="flex:6;"
+      />
+      <select name="role" style="flex:2;">
+        <option value=""       {% if not role %}selected{% endif %}>All Roles</option>
+        <option value="institution" {% if role=='institution' %}selected{% endif %}>Institution</option>
+        <option value="teacher"     {% if role=='teacher' %}selected{% endif %}>Teacher</option>
+        <option value="student"     {% if role=='student' %}selected{% endif %}>Student</option>
+      </select>
+      <button type="submit" class="btn">Search</button>
+    </form>
+
+    <!-- Users Table -->
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Joined At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if users %}
+          {% for u in users %}
+            <tr id="user-{{ u.id }}">
+              <td>{{ u.id }}</td>
+              <td>{{ u.email }}</td>
+              <td>{{ u.role.capitalize() }}</td>
+              <td>{{ u.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+              <td class="action-tabs">
+                <a
+                  href="{{ url_for('admin.view_user', user_id=u.id) }}"
+                  class="action-btn"
+                >View</a>
+                <form action="{{ url_for('admin.delete_user', user_id=u.id) }}" method="POST" id="delete-form-{{ u.id }}" style="display: inline;">
+                  <button type="submit" class="action-btn">Delete</button>
+                </form>              
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="5" style="text-align:center;">No users found.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+  </div>
+{% endblock %}

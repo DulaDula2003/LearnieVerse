@@ -1,0 +1,84 @@
+{% extends "institute/base.html" %}
+
+{% block title %}LearnieVerse Dashboard{% endblock %}
+
+{% block content %}
+<div class="institute-info">
+  <h1>{{ institute.institution_name }}</h1>
+  <h2>Dashboard</h2>
+</div>
+
+<div class="cards-container">
+  <div class="row top-row">
+    <div class="card" style="
+    height: 100%;
+">
+      <h4>Quick Stats</h4>
+      <ul>
+        <li>Total Students: {{ total_students }}</li>
+        <li>Total Teachers: {{ total_teachers }}</li>
+      </ul>
+    </div>
+    <div class="card"  style="
+    height: 100%;
+">
+      <h4>Recent Announcements</h4>
+      <ul>
+        {% for a in announcements %}
+          <li>{{ a.title }}</li>
+        {% else %}
+          <li>No announcements yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="row bottom-row">
+    <div class="card" style="
+    height: 100%;
+">
+      <h4>Institute Overview</h4>
+      <canvas id="overviewChart" width="400" height="200"></canvas>
+    </div>
+    <div class="card" style="
+    height: 100%;
+">
+      <h4>Pending Complaints</h4>
+      <ul>
+        {% for c in complaints %}
+          <li>{{ c.subject }}</li>
+        {% else %}
+          <li>No pending complaints.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('overviewChart').getContext('2d');
+  const overviewChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Students', 'Teachers'],
+      datasets: [{
+        label: 'Total Count',
+        data: [{{ total_students }}, {{ total_teachers }}],
+        backgroundColor: ['#4FC3F7', '#81C784'],
+        borderColor: ['#0288D1', '#388E3C'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 1 }
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock %}

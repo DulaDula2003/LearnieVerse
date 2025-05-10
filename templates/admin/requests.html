@@ -1,0 +1,120 @@
+{% extends "admin/base.html" %}
+
+{% block title %}LearnieVerse Admin - Requests{% endblock %}
+
+{% block content %}
+  <div class="institute-info">
+    <h1>Requests</h1>
+  </div>
+
+  <div class="request-card">
+    <!-- Inline Search & Filter for Requests -->
+      <form class="search-filter-container" method="GET" action="{{ url_for('admin.requests') }}">
+        <input type="text" name="search" placeholder="Search by institute name or ID" style="flex: 6;" value="{{ request.args.get('search', '') }}"/>
+        <select name="status">
+          <option value="">All Status</option>
+          <option value="pending" {% if request.args.get('status')=='pending' %}selected{% endif %}>Pending</option>
+          <option value="approved" {% if request.args.get('status')=='approved' %}selected{% endif %}>Approved</option>
+          <option value="rejected" {% if request.args.get('status')=='rejected' %}selected{% endif %}>Rejected</option>
+        </select>
+        <button type="submit">Search</button>
+      </form>
+
+    <!-- Requests Table -->
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Institute ID</th>
+          <th>Institute Name</th>
+          <th>Location</th>
+          <th>Current Status</th>
+          <th>Update Request</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for institute in institutions %}
+  <tr>
+    <td>{{ institute.id }}</td>
+    <td>{{ institute.institution_name }}</td>
+    <td>{{ institute.city }}, {{ institute.state }}</td>
+    <td id="status-{{ institute.id }}">{{ institute.status | capitalize }}</td>
+    <td>
+      {% if institute.status != 'approved' %}
+        <div class="action-tabs">
+          <button class="action-btn" onclick="updateStatus('approved', {{ institute.id }})">Approve</button>
+          <button class="action-btn" onclick="updateStatus('rejected', {{ institute.id }})">Reject</button>
+          <button class="action-btn" onclick="updateStatus('pending', {{ institute.id }})">Pending</button>
+        </div>
+      {% else %}
+        <span style="color: green; font-weight: bold;">Approved</span>
+      {% endif %}
+    </td>
+  </tr>
+{% else %}
+  <tr>
+    <td colspan="5">No requests found.</td>
+  </tr>
+{% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Function to update status using fetch API
+    function updateStatus(action, instituteId) {
+      fetch("{{ url_for('admin.update_institution_status') }}", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ action: action, instituteId: instituteId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.error) {
+          alert("Error: " + data.error);
+        } else {
+          alert("Status updated successfully to " + action);
+          // Optionally update the UI instantly:
+          document.getElementById('status-' + instituteId).innerText = action.charAt(0).toUpperCase() + action.slice(1);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Error updating status.");
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const table = document.querySelector(".styled-table");
+      const headers = table.querySelectorAll("th");
+      const tbody = table.querySelector("tbody");
+    
+      headers.forEach((header, index) => {
+        header.addEventListener("click", () => {
+          const rows = Array.from(tbody.querySelectorAll("tr"));
+          const isAscending = header.dataset.order === "asc";
+          header.dataset.order = isAscending ? "desc" : "asc";
+    
+          rows.sort((rowA, rowB) => {
+            const cellA = rowA.cells[index].innerText.trim();
+            const cellB = rowB.cells[index].innerText.trim();
+    
+            // Convert numeric values to numbers for proper sorting
+            const isNumeric = !isNaN(cellA) && !isNaN(cellB);
+            if (isNumeric) {
+              return isAscending ? cellA - cellB : cellB - cellA;
+            }
+    
+            return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+          });
+    
+          // Remove and re-append rows in sorted order
+          tbody.innerHTML = "";
+          rows.forEach((row) => tbody.appendChild(row));
+        });
+      });
+    });
+    
+  </script>
+{% endblock %}

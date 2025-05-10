@@ -1,0 +1,209 @@
+/* GLOBAL RESET & FONT */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+  }
+  
+  /* PAGE WRAPPER */
+  body {
+    background: #F4F2DE;
+    padding: 2rem;
+    text-align: center;
+  }
+
+   /* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #E9B384;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d17a3b;
+}
+  
+  /* MAIN SECTION */
+  .signup-page {
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* SIGNUP CONTAINER */
+  .signup-container {
+    background: #FFFFFF;
+    border: 1px solid #000;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 1314px; /* from your Figma snippet if you like */
+    padding: 2rem;
+    text-align: left; /* We'll left-align the form content */
+  }
+  
+  /* HEADER */
+  .signup-header {
+    text-align: center; /* Center just the header portion */
+    margin-bottom: 2rem;
+  }
+  
+  .signup-header h1 {
+    font-size: 2rem;        /* Adjust from 48px to a more manageable size */
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .signup-subtitle {
+    font-size: 1.2rem;      /* Adjust from 29px to a smaller size */
+    color: #CA7979;
+  }
+  
+  /* SECTION TITLES (e.g., Institute Details, Admin’s Details) */
+  .section-title {
+    font-size: 1.5rem;      /* e.g., 32px → 1.5rem for smaller screens */
+    font-weight: 700;
+    margin: 2rem 0 1rem;    /* spacing above & below */
+  }
+  
+  /* FORM LAYOUT */
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;        /* Wrap on smaller screens */
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* SINGLE FORM GROUP */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;                /* So each field grows evenly */
+    min-width: 240px;       /* Enough space for label + input */
+  }
+  
+  .form-group label {
+    font-size: 1.2rem;      /* 32px → 1.2rem */
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+    color: #000;
+  }
+  
+  .form-group input {
+    border: 1px solid #000;
+    border-radius: 15px;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+  
+  /* FILE INPUT */
+  /* Hide the actual file input button */
+  .file-input::-webkit-file-upload-button {
+    all: unset;
+    font-size: 1.2rem;      /* 32px → 1.2rem */
+    font-weight: 600;
+    margin-right: 1rem;
+    color: #000;
+    cursor: pointer;
+}
+  
+  /* TERMS & CONDITIONS CHECKBOX */
+  .terms-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+  }
+  
+  .terms-label {
+    font-size: 1rem; /* 24px → 1rem */
+    font-weight: 400;
+    color: #000;
+  }
+  
+  .terms-label a {
+    color: #7C9D96; /* link color if you like */
+    text-decoration: underline;
+  }
+  
+  /* REGISTER BUTTON */
+  .btn-row {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .register-btn {
+    background: #E9B384;
+    border: none;
+    border-radius: 10px;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem; /* 24px → 1.2rem */
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .register-btn:hover {
+    background: #d17a3b;
+    color: #fff;
+  }
+  
+  /* RESPONSIVE MEDIA QUERIES */
+  @media (max-width: 768px) {
+    .signup-header h1 {
+      font-size: 1.4rem;
+    }
+    .signup-subtitle {
+      font-size: 1rem;
+    }
+    .section-title {
+      font-size: 1.2rem;
+    }
+    .form-group label {
+      font-size: 1rem;
+    }
+    .form-group input {
+      font-size: 0.9rem;
+    }
+    .file-input {
+      font-size: 0.9rem;
+    }
+    .terms-label {
+      font-size: 0.9rem;
+    }
+    .register-btn {
+      font-size: 1rem;
+    }
+  }
+  
+  input[type="checkbox" i] {
+    all: unset;
+    width: 15px;
+    height: 15px;
+    border: 1px solid #7C9D96;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 2px; /* optional for slight rounding */
+  }
+  
+  input[type="checkbox" i]:checked {
+    background-color: #7C9D96;
+  }
+
+  .register-btn:disabled {
+    pointer-events: none;
+    /* Optionally, adjust the background or other styles for disabled state */
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .register-btn:disabled:hover {
+    /* Ensure no hover effects apply */
+    background-color: initial; /* or set your desired disabled color */
+    transform: none;
+  }
+  
+  
