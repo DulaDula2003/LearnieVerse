@@ -1,11 +1,14 @@
 import os
+from urllib.parse import urlparse
 
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "your_secret_key")
 
-    # For Flask-MySQLdb
-    MYSQL_HOST = os.environ.get("MYSQL_HOST") or "mysql.railway.internal"  # Internal Railway MySQL host
-    MYSQL_USER = os.environ.get("MYSQL_USER") or "root"
-    MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD") or "zMaHYKnXXPNKehOeLulDVXYKJIFfvcOZ"
-    MYSQL_DB = os.environ.get("MYSQL_DB") or "learnieverse_db"
-    MYSQL_PORT = int(os.environ.get("MYSQL_PORT") or 3306)  # Default MySQL port
+    # Parse the DATABASE_URL
+    url = urlparse(os.environ.get("DATABASE_URL", "mysql://root:zMaHYKnXXPNKehOeLulDVXYKJIFfvcOZ@tramway.proxy.rlwy.net:34169/railway"))
+
+    MYSQL_HOST = url.hostname
+    MYSQL_USER = url.username
+    MYSQL_PASSWORD = url.password
+    MYSQL_DB = url.path[1:]
+    MYSQL_PORT = url.port or 3306
