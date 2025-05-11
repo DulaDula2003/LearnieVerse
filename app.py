@@ -57,5 +57,16 @@ def about_us():
     # Renders the Home.html template
     return render_template('about_us.html')
 
+# Test Railway MySQL Connection
+try:
+    with app.app_context():
+        conn = current_app.db.connection
+        cursor = conn.cursor()
+        cursor.execute("SELECT DATABASE();")
+        db_name = cursor.fetchone()[0]
+        print(f"✅ Connected to Railway MySQL Database: {db_name}")
+except Exception as e:
+    print(f"❌ MySQL connection failed: {e}")
+
 if __name__ == "__main__":
     app.run(debug=True, host='127.0.0.1', port=8080)
